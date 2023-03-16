@@ -1,6 +1,7 @@
 {
 	"tasks": {
-		"score": "deno run -A src/bundle_score.ts"
+		"score": "deno run -A src/bundle_score.ts",
+		"wpt_assets": "deno run -A src/wpt_assets.ts"
 	},
 	"fmt": {
 		"options": {
