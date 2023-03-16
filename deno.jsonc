@@ -6,6 +6,9 @@
 		"options": {
 			"useTabs": true,
 			"singleQuote": true
+		},
+		"files": {
+			"exclude": ["build"]
 		}
 	}
 }
