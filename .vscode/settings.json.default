@@ -1,11 +1,12 @@
 {
-  "cSpell.words": [
-    "webpagetest"
-  ],
-  "deno.enable": true,
-  "editor.defaultFormatter": "denoland.vscode-deno",
-  "files.associations": {
-    ".vscode/settings.json*": "jsonc",
-    "tsconfig*.json": "jsonc"
-  }
+	"cSpell.words": [
+		"webpagetest"
+	],
+	"deno.enable": true,
+	"deno.lint": true,
+	"editor.defaultFormatter": "denoland.vscode-deno",
+	"files.associations": {
+		".vscode/settings.json*": "jsonc",
+		"tsconfig*.json": "jsonc"
+	}
 }
