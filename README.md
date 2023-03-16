@@ -1,2 +1,4 @@
-# open-journalism
-tools for measuring the accessibility of www.theguardian.com
+# Open Journalism
+
+Tools for measuring the accessibility of [the Guardian](https://www.theguardian.com/).
+
