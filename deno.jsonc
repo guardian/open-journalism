@@ -1,8 +1,14 @@
 {
+	"tasks": {
+		"score": "deno run -A src/bundle_score.ts"
+	},
 	"fmt": {
 		"options": {
 			"useTabs": true,
 			"singleQuote": true
+		},
+		"files": {
+			"exclude": ["build"]
 		}
 	}
 }
