@@ -1,0 +1,5 @@
+# Only suggest default settings
+.vscode/settings.json
+
+.env
+build
