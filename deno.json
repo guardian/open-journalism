@@ -9,7 +9,7 @@
 			"singleQuote": true
 		},
 		"files": {
-			"exclude": ["build"]
+			"exclude": ["build", "cache"]
 		}
 	}
 }
