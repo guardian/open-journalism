@@ -1,6 +1,7 @@
 {
 	"tasks": {
-		"score": "deno run -A src/bundle_score.ts"
+		"score": "deno run -A src/bundle_score.ts",
+		"maintain-readme": "deno run -A scripts/maintain_readme.js"
 	},
 	"fmt": {
 		"options": {
