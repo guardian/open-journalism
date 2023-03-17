@@ -3,10 +3,11 @@
  */
 
 import { parse as parseJSDoc } from 'npm:comment-parser';
-const readme = await Deno.readTextFile('./README.md');
-import { fileURLToPath } from 'https://deno.land/std@0.170.0/node/url.ts';
-import { relative } from 'https://deno.land/std@0.177.0/path/mod.ts';
+import { fileURLToPath } from 'node:url';
+import { relative } from 'https://deno.land/std@0.180.0/path/mod.ts';
+
 const { tasks } = JSON.parse(await Deno.readTextFile('./deno.json'));
+const readme = await Deno.readTextFile('./README.md');
 
 const tasksWithDescription = [];
 
