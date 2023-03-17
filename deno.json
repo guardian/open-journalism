@@ -3,6 +3,11 @@
 		"score": "deno run -A src/bundle_score.ts",
 		"maintain-readme": "deno run -A scripts/maintain_readme.js"
 	},
+	"lint": {
+		"files": {
+			"exclude": ["build", "cache"]
+		}
+	},
 	"fmt": {
 		"options": {
 			"useTabs": true,
