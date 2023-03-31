@@ -1,7 +1,10 @@
 import { get_report } from './report.js';
+import { chart } from './sankey.js';
 
 const test = new URLSearchParams(window.location.search).get('test') ??
 	undefined;
+
+if (chart) document.body.appendChild(chart);
 
 if (test) {
 	const report = await get_report(test);
@@ -11,7 +14,7 @@ if (test) {
 	const ul = document.createElement('ul');
 	document.body.appendChild(ul);
 
-	for (const request of report.requests) {
+	for (const request of report.requests.slice(0, 3)) {
 		const li = document.createElement('li');
 		li.innerText = request.full_url + ' – ' + request.objectSize / 1000 + ' kB';
 
