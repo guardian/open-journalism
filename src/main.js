@@ -58,14 +58,40 @@ if (test) {
 	document.body.removeChild(loading);
 	clearInterval(dots);
 
-	const h1 = document.createElement('h1');
-	h1.innerHTML = `<a href="${testUrl}">${testUrl}</a>`;
-	document.body.appendChild(h1);
+	const urlLink = document.createElement('div');
+	urlLink.innerHTML = `<a href="${testUrl}">${testUrl}</a>`;
+	urlLink.className = 'test-url';
+	document.body.appendChild(urlLink);
 
 	const h2 = document.createElement('h2');
 	h2.innerHTML = from +
-		` <a href="https://www.webpagetest.org/result/${test}/">#${test}</a>`;
+		` <a href="https://www.webpagetest.org/result/${test}/">open</a>`;
 	document.body.appendChild(h2);
+
+	const perf = document.createElement('table');
+	perf.className = 'performance';
+	for (const [key, value] of Object.entries(performance)) {
+		if (typeof value !== 'number') {
+			continue;
+		}
+		const row = document.createElement('tr');
+		const keyCell = document.createElement('th');
+		const valueCell = document.createElement('td');
+		keyCell.innerText = key;
+
+		const formatted_value = value > 1
+			? `${format(value / 1000)}s`
+			: `${Math.round(value * 100 * 10) / 10}%`;
+
+		valueCell.innerText = formatted_value;
+		row.appendChild(keyCell);
+		row.appendChild(valueCell);
+		perf.appendChild(row);
+	}
+	document.body.appendChild(perf);
+
+	const ul = document.createElement('ul');
+	document.body.appendChild(ul);
 
 	const svg = chart(
 		{
@@ -79,24 +105,6 @@ if (test) {
 	if (svg) {
 		document.body.appendChild(svg);
 	}
-
-	const perf = document.createElement('ul');
-	document.body.appendChild(perf);
-	for (const [key, value] of Object.entries(performance)) {
-		if (typeof value !== 'number') {
-			continue;
-		}
-		const li = document.createElement('li');
-
-		const formatted_value = value > 1
-			? `${format(value)}s`
-			: `${Math.round(value * 100 * 10) / 10}%`;
-		li.innerText = `${key}: ${formatted_value}`;
-		perf.appendChild(li);
-	}
-
-	const ul = document.createElement('ul');
-	document.body.appendChild(ul);
 } else {
 	const p = document.createElement('p');
 	p.innerText =
