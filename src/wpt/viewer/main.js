@@ -49,23 +49,28 @@ if (test) {
 	}
 
 	const filtered_requests = [
-		...above,
-		...below
+		above,
+		below
 			.reduce(
 				(others, request) => {
 					const maybe_request = others.find(({ request_type }) =>
 						request_type === request.request_type
 					);
-					if (maybe_request) maybe_request.objectSize += request.objectSize;
-					else {others.push({
+					if (maybe_request) {
+						maybe_request.objectSize += request.objectSize;
+						maybe_request.responseCode++;
+					} else {others.push({
 							...request,
-							full_url: '… and smaller items',
+							responseCode: 1,
 						});}
 					return others;
 				},
 				/** @type {Requests} */ ([]),
-			),
-	];
+			).map((request) => ({
+				...request,
+				full_url: `… and ${request.responseCode} smaller requests`,
+			})),
+	].flat();
 
 	const { nodes, links } = get_nodes_and_links(
 		filtered_requests
