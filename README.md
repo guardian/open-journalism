@@ -18,6 +18,11 @@ deno task score
 ```
 
 ```sh
+# Local development on http://localhost:4507/
+deno task serve
+```
+
+```sh
 # keep the README up to date with the tasks in deno.json
 deno task maintain-readme
 ```

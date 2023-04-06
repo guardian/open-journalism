@@ -1,3 +1,7 @@
+/**
+ * Local development on http://localhost:4507/
+ */
+
 import { get_report } from './report.js';
 import { chart } from './sankey.js';
 import { format } from './utils.js';

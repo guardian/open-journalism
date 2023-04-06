@@ -12,7 +12,7 @@ const readme = await Deno.readTextFile('./README.md');
 const tasksWithDescription = [];
 
 for (const [name, command] of Object.entries(tasks)) {
-	const filePath = command.split(' ').pop();
+	const filePath = command.split(' ').at(-1);
 	const fileContents = await Deno.readTextFile(filePath);
 	const JSDoc = parseJSDoc(fileContents);
 	const description = JSDoc[0]?.description ??
