@@ -59,7 +59,7 @@ if (test) {
 					if (maybe_request) maybe_request.objectSize += request.objectSize;
 					else {others.push({
 							...request,
-							full_url: '/… and smaller items',
+							full_url: '… and smaller items',
 						});}
 					return others;
 				},
