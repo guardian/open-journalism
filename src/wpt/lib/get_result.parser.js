@@ -5,7 +5,7 @@ const asset_type = z.object({
 	bytes: z.number(),
 });
 
-/** @typedef {import("https://esm.sh/zod@v3.20.2").infer<request>} Request */
+/** @typedef {z.infer<request>} Request */
 const request = z.object({
 	full_url: z.string(),
 	responseCode: z.number(),
