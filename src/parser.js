@@ -13,6 +13,7 @@ const type = object({
 	bytes: number(),
 });
 
+/** @typedef {import("https://esm.sh/zod@v3.20.2").infer<request>} Request */
 const request = object({
 	full_url: string(),
 	responseCode: number(),
@@ -32,8 +33,16 @@ const request = object({
 	objectSize: number(),
 });
 
+const performance = object({
+	'lighthouse.Performance': number(),
+	'firstContentfulPaint': number(),
+	'chromeUserTiming.LargestContentfulPaint': number(),
+	'chromeUserTiming.CumulativeLayoutShift': number(),
+	'TotalBlockingTime': number(),
+	'TTFB': number(),
+}).partial();
+
 const step = object({
-	'lighthouse.Performance': number().optional(),
 	requests: array(request),
 	breakdown: object({
 		html: type,
@@ -43,7 +52,7 @@ const step = object({
 		font: type,
 		other: type,
 	}),
-});
+}).merge(performance);
 
 const single_run = object({
 	numSteps: literal(1),

@@ -31,8 +31,13 @@ export const get_report = async (test) => {
 		? run.firstView
 		: run.firstView.steps[0];
 
-	const { requests: raw_requests, 'lighthouse.Performance': performance } =
-		step;
+	const {
+		requests: raw_requests,
+		'lighthouse.Performance': lighthouse,
+		'firstContentfulPaint': fcp,
+		'chromeUserTiming.LargestContentfulPaint': lcp,
+		'chromeUserTiming.CumulativeLayoutShift': cls,
+	} = step;
 
 	const requests = raw_requests.map((request) => {
 		const request_type = types.find((type) => type === request.request_type) ??
@@ -46,7 +51,12 @@ export const get_report = async (test) => {
 
 	return {
 		from,
-		performance,
+		performance: {
+			lighthouse,
+			cls,
+			lcp,
+			fcp,
+		},
 		testUrl,
 		requests,
 	};

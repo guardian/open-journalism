@@ -3,12 +3,13 @@
  *
  * @see https://observablehq.com/@d3/sankey-diagram
  */
-import * as d3 from 'https://esm.sh/d3@7.8.2';
+import { create } from 'https://esm.sh/d3@7.8.2';
 import {
 	sankey,
 	sankeyLinkHorizontal,
 	sankeyRight,
 } from 'https://esm.sh/d3-sankey@0.12.3';
+import { format } from './utils.js';
 
 /** @typedef {import('https://esm.sh/d3-sankey@0.12.3').SankeyLink<{id: string, value: number}, {}>} Link */
 /** @typedef {import('https://esm.sh/d3-sankey@0.12.3').SankeyNode<{id: string, value: number}, {}>} Node */
@@ -42,24 +43,11 @@ const sortLink = (a, b) => {
 	return group_difference === 0 ? b.value - a.value : group_difference;
 };
 
-/** @type {Node[]} */
-const nodes = [
-	{ id: 'Script', value: 3 },
-	{ id: 'Script/first', value: 1 },
-	{ id: 'Script/second', value: 2 },
-];
-
-/** @type {Link[]} */
-const links = [
-	{ source: 'Script', target: 'Script/first', value: 1 },
-	{ source: 'Script', target: 'Script/second', value: 2 },
-];
-
 /** @type {(node: MaybeNode) => keyof typeof colour_mappings} */
 const nodeGroup = (node) => {
 	if (typeof node !== 'object') return 'other';
 
-	const [type, domain] = node.id.split('/');
+	const [type, , , domain] = node.id.split('/');
 
 	switch (type) {
 		case 'Script': {
@@ -100,8 +88,6 @@ const nodeGroup = (node) => {
 	}
 };
 
-const { format } = Intl.NumberFormat('en-GB');
-
 /** @param node {Node} */
 const nodeLabel = ({ id, value }) => {
 	const path = id.split('/').filter(Boolean).at(-1);
@@ -111,110 +97,110 @@ const nodeLabel = ({ id, value }) => {
 
 const marginLeft = 12;
 const marginTop = 24;
-const width = 600;
-const height = 420;
-const marginRight = 200;
+const width = 1280;
+const marginRight = 360;
 const marginBottom = 18;
 const nodeWidth = 24;
-const nodePadding = 8;
 
-/** @type {typeof sankey<SankeyGraph, Node, Link>} */ (sankey)()
-	.nodeId(({ index = -1 }) => nodes[index]?.id)
-	.nodeAlign(sankeyRight)
-	.nodeWidth(nodeWidth)
-	.nodePadding(nodePadding)
-	.linkSort((a, b) => {
-		const group_a = nodeGroup(a.target);
-		const group_b = nodeGroup(b.target);
+const sankey_layout =
+	/** @type {typeof sankey<SankeyGraph, Node, Link>} */ (sankey)()
+		.nodeAlign(sankeyRight)
+		.nodeWidth(nodeWidth)
+		.linkSort((a, b) => {
+			const group_a = nodeGroup(a.target);
+			const group_b = nodeGroup(b.target);
 
-		const group_difference = compareGroup(group_a, group_b);
+			const group_difference = compareGroup(group_a, group_b);
 
-		return group_difference === 0 ? b.value - a.value : group_difference;
-	})
-	.nodeSort(sortLink)
-	.extent([
-		[marginLeft, marginTop],
-		[width - marginRight, height - marginBottom],
-	])({ nodes, links });
+			return group_difference === 0 ? b.value - a.value : group_difference;
+		})
+		.nodeSort(sortLink);
 
-console.log({ nodes, links });
+/** @type {(ops: {nodes: Node[], links: Link[], height: number, padding: number}) => SVGSVGElement | null}} */
+export const chart = ({ nodes, links, height, padding }) => {
+	sankey_layout
+		.nodePadding(padding)
+		.extent([
+			[marginLeft, marginTop],
+			[width - marginRight, height - marginBottom],
+		]).nodeId(({ index = -1 }) => nodes[index]?.id)({ nodes, links });
 
-// A unique identifier for clip paths (to avoid conflicts).
-const uid = `O-${Math.random().toString(16).slice(2)}`;
+	// A unique identifier for clip paths (to avoid conflicts).
+	const uid = `O-${Math.random().toString(16).slice(2)}`;
 
-const svg = d3
-	.create('svg')
-	.attr('width', width)
-	.attr('height', height)
-	.attr('viewBox', [0, 0, width, height])
-	.attr('style', 'max-width: 100%; height: auto; height: intrinsic;');
+	const svg = create('svg')
+		.attr('width', width)
+		.attr('height', height)
+		.attr('viewBox', [0, 0, width, height])
+		.attr('style', 'max-width: 100%; height: auto; height: intrinsic;');
 
-const node = svg
-	.append('g')
-	.attr('stroke', 'none')
-	.selectAll('rect')
-	.data(nodes)
-	.join('rect')
-	.attr('x', ({ x0 = 0 }) => x0)
-	.attr('y', ({ y0 = 0 }) => y0)
-	.attr('height', ({ y1 = 0, y0 = 0 }) => y1 - y0)
-	.attr('width', ({ x1 = 0, x0 = 0 }) => x1 - x0)
-	.attr('fill', colour);
+	const node = svg
+		.append('g')
+		.attr('stroke', 'none')
+		.selectAll('rect')
+		.data(nodes)
+		.join('rect')
+		.attr('x', ({ x0 = 0 }) => x0)
+		.attr('y', ({ y0 = 0 }) => y0)
+		.attr('height', ({ y1 = 0, y0 = 0 }) => y1 - y0)
+		.attr('width', ({ x1 = 0, x0 = 0 }) => x1 - x0)
+		.attr('fill', colour);
 
-node.append('title').text(({ id, value }) => `${id} – ${value}`);
+	node.append('title').text(({ id, value }) => `${id} – ${value}`);
 
-// The node labels
-svg
-	.append('g')
-	.attr('font-family', 'sans-serif')
-	.attr('font-size', 10)
-	.selectAll('text')
-	.data(nodes)
-	.join('text')
-	.attr('x', ({ x1 = 0 }) => x1 + 3)
-	.attr('y', ({ y1 = 0, y0 = 0 }) => (y1 + y0) / 2)
-	.attr('dy', '0.35em')
-	.attr('text-anchor', 'start')
-	.text(nodeLabel);
+	// The node labels
+	svg
+		.append('g')
+		.attr('font-family', 'sans-serif')
+		.attr('font-size', 10)
+		.selectAll('text')
+		.data(nodes)
+		.join('text')
+		.attr('x', ({ x1 = 0 }) => x1 + 3)
+		.attr('y', ({ y1 = 0, y0 = 0 }) => (y1 + y0) / 2)
+		.attr('dy', '0.35em')
+		.attr('text-anchor', 'start')
+		.text(nodeLabel);
 
-/** @type {(node: Link["target"]) => Node | undefined} */
-const as_node = (node) => (typeof node === 'object' ? node : undefined);
+	/** @type {(node: Link["target"]) => Node | undefined} */
+	const as_node = (node) => (typeof node === 'object' ? node : undefined);
 
-const link = svg
-	.append('g')
-	.attr('fill', 'none')
-	.attr('stroke-opacity', 0.6)
-	.selectAll('g')
-	.data(links)
-	.join('g')
-	.style('mix-blend-mode', 'screen');
+	const link = svg
+		.append('g')
+		.attr('fill', 'none')
+		.attr('stroke-opacity', 0.6)
+		.selectAll('g')
+		.data(links)
+		.join('g')
+		.style('mix-blend-mode', 'screen');
 
-link
-	.append('linearGradient')
-	.attr('id', ({ index }) => `${uid}-link-${index}`)
-	.attr('gradientUnits', 'userSpaceOnUse')
-	.attr('x1', ({ source }) => as_node(source)?.x1 ?? -1)
-	.attr('x2', ({ target }) => as_node(target)?.x0 ?? -1)
-	.call((gradient) =>
-		gradient
-			.append('stop')
-			.attr('offset', '0%')
-			.attr('stop-color', ({ source }) => colour(source))
-	)
-	.call((gradient) =>
-		gradient
-			.append('stop')
-			.attr('offset', '100%')
-			.attr('stop-color', ({ target }) => colour(target))
-	);
+	link
+		.append('linearGradient')
+		.attr('id', ({ index }) => `${uid}-link-${index}`)
+		.attr('gradientUnits', 'userSpaceOnUse')
+		.attr('x1', ({ source }) => as_node(source)?.x1 ?? -1)
+		.attr('x2', ({ target }) => as_node(target)?.x0 ?? -1)
+		.call((gradient) =>
+			gradient
+				.append('stop')
+				.attr('offset', '0%')
+				.attr('stop-color', ({ source }) => colour(source))
+		)
+		.call((gradient) =>
+			gradient
+				.append('stop')
+				.attr('offset', '100%')
+				.attr('stop-color', ({ target }) => colour(target))
+		);
 
-link
-	.append('path')
-	.attr('d', sankeyLinkHorizontal())
-	.attr('stroke', ({ index: i }) => `url(#${uid}-link-${i})`)
-	.attr('stroke-width', ({ width = 0 }) => Math.max(1, width))
-	.call((path) =>
-		path.append('title').text(({ index }) => index ?? '--missing index--')
-	);
+	link
+		.append('path')
+		.attr('d', sankeyLinkHorizontal())
+		.attr('stroke', ({ index: i }) => `url(#${uid}-link-${i})`)
+		.attr('stroke-width', ({ width = 0 }) => Math.max(1, width))
+		.call((path) =>
+			path.append('title').text(({ index }) => index ?? '--missing index--')
+		);
 
-export const chart = svg.node();
+	return svg.node();
+};
