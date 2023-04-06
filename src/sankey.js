@@ -22,9 +22,9 @@ const colour_mappings = /** @type {const} */ ({
 	'js-3rd': '#00DAF8',
 	image: '#E38800',
 	html: '#FF3D00',
-	css: '#FF0099',
-	font: '#FFC700',
+	font: '#FF0099',
 	other: '#B3B3B3',
+	everything: '#FFC700',
 });
 
 /** @param node {MaybeNode} */
@@ -77,9 +77,10 @@ const nodeGroup = (node) => {
 		case 'Font':
 			return 'font';
 
-		case 'Stylesheet':
-			return 'css';
+		case 'Everything else':
+			return 'everything';
 
+		case 'Stylesheet':
 		case 'Fetch':
 		case 'XHR':
 		case 'Other':

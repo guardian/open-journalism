@@ -17,13 +17,36 @@ if (test) {
 
 	const { requests, from, performance, testUrl } = await get_report(test);
 
+	const filtered_requests = [
+		...requests
+			.filter(({ objectSize }) => objectSize > 1000),
+		...requests.filter(({ objectSize }) =>
+			objectSize < 1000 && objectSize > 100
+		)
+			.reduce(
+				(others, request) => {
+					const maybe_request = others.find(({ request_type }) =>
+						request_type === request.request_type
+					);
+					if (maybe_request) maybe_request.objectSize += request.objectSize;
+					else {others.push({
+							...request,
+							full_url: '/… and smaller items',
+						});}
+					return others;
+				},
+				/** @type {Requests} */ ([]),
+			),
+	];
+
 	const { nodes, links } = get_nodes_and_links(
-		requests.filter(({ objectSize }) => objectSize > 320).map((request) => ({
-			...request,
-			request_type: request.full_url.includes('i.guim.co.uk')
-				? 'Media'
-				: reduced_types(request.request_type),
-		})),
+		filtered_requests
+			.map((request) => ({
+				...request,
+				request_type: request.full_url.includes('i.guim.co.uk')
+					? 'Media'
+					: reduced_types(request.request_type),
+			})),
 	);
 
 	console.log({ nodes, links });
@@ -45,8 +68,8 @@ if (test) {
 			nodes,
 			links,
 			padding,
-			height: requests.reduce((total, { objectSize }) =>
-						total + objectSize, 0) / 1200 + requests.length * padding,
+			height: filtered_requests.reduce((total, { objectSize }) =>
+						total + objectSize, 0) / 1200 + filtered_requests.length * padding,
 		},
 	);
 	if (svg) {
@@ -123,25 +146,20 @@ function reduced_types(type) {
 
 /** @type {(requests: Requests) => { nodes: import('./sankey.js').Node[], links: import('./sankey.js').Link[]}} */
 function get_nodes_and_links(requests) {
-	const other = { id: 'Other', value: 0 };
+	const script = { id: 'Script', value: 0 };
+	const other = { id: 'Everything else', value: 0 };
 	/** @type {import('./sankey.js').Node[]} */
 	const trunk = requests.reduce(
 		(types, { request_type, objectSize }) => {
 			if (request_type === 'Preflight') return types;
 
-			const type = types.find(({ id }) => id === request_type) ?? other;
+			const type = request_type === 'Script' ? script : other;
 
 			type.value += objectSize;
 
 			return types;
 		},
-		[other, { id: 'Script', value: 0 }, { id: 'Document', value: 0 }, {
-			id: 'Font',
-			value: 0,
-		}, {
-			id: 'Media',
-			value: 0,
-		}],
+		[script, other],
 	);
 
 	/** @type {import('./sankey.js').Node[]} */
@@ -152,12 +170,15 @@ function get_nodes_and_links(requests) {
 		return { id, value };
 	});
 
+	const nodes = trunk.concat(leaves);
+	const links = leaves.map(({ id, value }) => ({
+		source: id.split('/')[0] === 'Script' ? script.id : other.id,
+		target: id,
+		value,
+	}));
+
 	return {
-		nodes: trunk.concat(leaves),
-		links: leaves.map(({ id, value }) => ({
-			source: id.split('/')[0],
-			target: id,
-			value,
-		})),
+		nodes,
+		links,
 	};
 }
