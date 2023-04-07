@@ -3,6 +3,7 @@
  */
 
 import { get_result } from '../lib/get_result.js';
+import { get_image_src } from '../lib/get_image.js';
 import { chart } from './sankey.js';
 
 const test = new URLSearchParams(window.location.search).get('test') ??
@@ -133,6 +134,14 @@ if (test) {
 	);
 	if (svg) {
 		document.body.appendChild(svg);
+	}
+
+	const image_src = get_image_src(test);
+	if (image_src) {
+		const img = document.createElement('img');
+		img.width = 211; // Half-width of Moto G4
+		img.src = image_src;
+		document.body.appendChild(img);
 	}
 } else {
 	const p = document.createElement('p');
