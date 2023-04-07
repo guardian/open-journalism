@@ -3,7 +3,7 @@
  *
  * @see https://observablehq.com/@d3/sankey-diagram
  */
-import { create } from 'https://esm.sh/d3@7.8.2';
+import { create, schemeBrBG } from 'https://esm.sh/d3@7.8.2';
 import {
 	sankey,
 	sankeyLinkHorizontal,
@@ -32,15 +32,6 @@ const colour = (node) => colour_mappings[nodeGroup(node)];
 const nodeGroups = Object.keys(colour_mappings);
 /** @type {(a: keyof typeof colour_mappings, b: keyof typeof colour_mappings) => number} */
 const compareGroup = (a, b) => nodeGroups.indexOf(a) - nodeGroups.indexOf(b);
-/** @type {(a: Node, b: Node) => number} */
-const sortLink = (a, b) => {
-	const group_a = nodeGroup(a);
-	const group_b = nodeGroup(b);
-
-	const group_difference = compareGroup(group_a, group_b);
-
-	return group_difference === 0 ? b.value - a.value : group_difference;
-};
 
 /** @type {(node: MaybeNode) => keyof typeof colour_mappings} */
 const nodeGroup = (node) => {
@@ -109,14 +100,18 @@ const sankey_layout =
 		.nodeAlign(sankeyRight)
 		.nodeWidth(nodeWidth)
 		.linkSort((a, b) => {
-			const group_a = nodeGroup(a.target);
-			const group_b = nodeGroup(b.target);
-
-			const group_difference = compareGroup(group_a, group_b);
+			const group_difference = compareGroup(
+				nodeGroup(a.target),
+				nodeGroup(b.target),
+			);
 
 			return group_difference === 0 ? b.value - a.value : group_difference;
 		})
-		.nodeSort(sortLink);
+		.nodeSort((a, b) => {
+			const group_difference = compareGroup(nodeGroup(a), nodeGroup(b));
+
+			return group_difference === 0 ? b.value - a.value : group_difference;
+		});
 
 /** @type {(ops: {nodes: Node[], links: Link[], height: number, padding: number}) => SVGSVGElement | null}} */
 export const chart = ({ nodes, links, height, padding }) => {
@@ -135,6 +130,28 @@ export const chart = ({ nodes, links, height, padding }) => {
 		.attr('height', height)
 		.attr('viewBox', [0, 0, width, height])
 		.attr('style', 'max-width: 100%; height: auto; height: intrinsic;');
+
+	const defs = svg.append('defs');
+
+	defs.append('linearGradient')
+		.attr('id', 'gradient')
+		.call((gradient) =>
+			gradient
+				.append('stop')
+				.attr('offset', '72%')
+				.attr('stop-color', 'white')
+		).call((gradient) =>
+			gradient
+				.append('stop')
+				.attr('offset', '100%')
+				.attr('stop-color', 'black')
+		);
+
+	defs.append('mask').attr('id', 'mask')
+		.append('rect')
+		.attr('width', marginRight)
+		.attr('height', height)
+		.attr('x', width - marginRight).attr('fill', 'url(#gradient)');
 
 	const node = svg
 		.append('g')
@@ -162,7 +179,8 @@ export const chart = ({ nodes, links, height, padding }) => {
 		.attr('y', ({ y1 = 0, y0 = 0 }) => (y1 + y0) / 2)
 		.attr('dy', '0.35em')
 		.attr('text-anchor', 'start')
-		.text(nodeLabel);
+		.text(nodeLabel)
+		.attr('mask', 'url(#mask)');
 
 	/** @type {(node: Link["target"]) => Node | undefined} */
 	const as_node = (node) => (typeof node === 'object' ? node : undefined);
@@ -201,7 +219,9 @@ export const chart = ({ nodes, links, height, padding }) => {
 		.attr('stroke', ({ index: i }) => `url(#${uid}-link-${i})`)
 		.attr('stroke-width', ({ width = 0 }) => Math.max(1, width))
 		.call((path) =>
-			path.append('title').text(({ index }) => index ?? '--missing index--')
+			path.append('title').text(({ source, target }) =>
+				`${as_node(source)?.id} → ${as_node(target)?.id}`
+			)
 		);
 
 	return svg.node();
