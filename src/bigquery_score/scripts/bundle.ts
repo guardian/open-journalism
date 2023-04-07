@@ -10,7 +10,11 @@ console.log('📦 Bundling score script to:', underline(dist.pathname));
 const { code } = await bundle(src);
 
 await ensureFile(dist);
-await Deno.writeTextFile(dist, code);
+await Deno.writeTextFile(
+	dist,
+	'// @ts-nocheck -- bundled output\n' +
+		code.replace(/\n\/\/# sourceMappingURL(.+)/, ''),
+);
 
 console.info('✅ Done!');
 console.log(
