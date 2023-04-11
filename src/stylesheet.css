@@ -10,6 +10,29 @@ html {
 	color-scheme: only dark;
 }
 
+#header {
+	display: grid;
+	grid-template-columns: min-content 1fr;
+	grid-template-rows: [title] 1fr [config] 1fr [page] 1fr;
+	border-left: 1px solid #999999;
+}
+#config {
+	grid-column: 1;
+	grid-row: 2;
+}
+#page {
+	grid-column: 1;
+	grid-row: 3;
+}
+#header #config, #header #page  {
+	padding-top: 8px;
+	padding-bottom: 4px;
+	padding-left: 8px;
+}
+#config, #page {
+	border-top: 1px solid #999999;
+}
+
 body {
 	padding: 1rem;
 	font-size: 16px;
@@ -35,6 +58,8 @@ oj-header h1 {
 	font-family: "GuardianTextEgyptian";
 	font-weight: 500;
 	font-size: 2.5rem;
+	padding-left: 8px;
+	padding-right: 8px;
 }
 
 oj-header h1 a {
@@ -66,4 +91,28 @@ h2 {
 ul {
 	list-style-position: inside;
 	list-style-type: '- ';
+}
+
+@media only screen and (min-width: 960px) {
+	#header {
+		grid-template-columns: [title] 1fr [config] 1fr [page] 1fr;
+		grid-template-rows: min-content 1fr;
+		border-top: 1px solid #999999;
+		border-left: none;
+	}
+	h1 {
+		padding-left: 0;
+	}
+	#config {
+		grid-column: 2;
+		grid-row: 1;
+	}
+	#page {
+		grid-column: 3;
+		grid-row: 1;
+	}
+	#config, #page {
+		border-left: 1px solid #999999;
+		border-top: none;
+	}
 }
