@@ -3,7 +3,7 @@
  *
  * @see https://observablehq.com/@d3/sankey-diagram
  */
-import { create, schemeBrBG } from 'https://esm.sh/d3@7.8.2';
+import { create } from 'https://esm.sh/d3@7.8.2';
 import {
 	sankey,
 	sankeyLinkHorizontal,
