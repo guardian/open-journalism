@@ -32,4 +32,9 @@ deno task dev
 deno task maintain-readme
 ```
 
+```sh
+# [src/wpt/run_tests.ts needs a description...]
+deno task wpt
+```
+
 <!-- /tasks -->
