@@ -2,9 +2,8 @@
  * Local development on http://localhost:4507/
  */
 
-import { get_report } from './report.js';
+import { get_result } from '../lib/get_result.js';
 import { chart } from './sankey.js';
-import { format } from './utils.js';
 
 const test = new URLSearchParams(window.location.search).get('test') ??
 	undefined;
@@ -19,7 +18,7 @@ if (test) {
 	}, 60);
 	document.body.appendChild(loading);
 
-	const { requests, from, performance, testUrl } = await get_report(test);
+	const { requests, from, performance, testUrl } = await get_result(test);
 
 	const filtered_requests = [
 		...requests
@@ -80,7 +79,7 @@ if (test) {
 		keyCell.innerText = key;
 
 		const formatted_value = value > 1
-			? `${format(value / 1000)}s`
+			? `${Intl.NumberFormat('en-GB').format(value / 1000)}s`
 			: `${Math.round(value * 100 * 10) / 10}%`;
 
 		valueCell.innerText = formatted_value;
@@ -132,9 +131,9 @@ if (test) {
 	}
 }
 
-/** @typedef {import('./parser.js').Request[]} Requests */
+/** @typedef {import('../lib/get_result.parser.js').Request[]} Requests */
 
-/** @type {(type: import('./parser.js').Request["request_type"]) => "Script" | "Document" | "Font" | "Media" | "Other"} */
+/** @type {(type: import('../lib/get_result.parser.js').Request["request_type"]) => "Script" | "Document" | "Font" | "Media" | "Other"} */
 function reduced_types(type) {
 	switch (type) {
 		case 'Script':

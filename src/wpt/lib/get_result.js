@@ -1,4 +1,4 @@
-import { get_result } from './parser.js';
+import { parsed_result } from './get_result.parser.js';
 
 const types = /** @type {const} */ ([
 	'Script',
@@ -11,13 +11,13 @@ const types = /** @type {const} */ ([
 ]);
 
 /** @param test {string} */
-export const get_report = async (test) => {
+export const get_result = async (test) => {
 	const params = new URLSearchParams({ test });
 	const result = await fetch(
 		new URL(`https://www.webpagetest.org/jsonResult.php?${params.toString()}`),
 	)
 		.then((r) => r.json())
-		.then((d) => get_result(d));
+		.then((d) => parsed_result(d));
 
 	const {
 		testUrl,

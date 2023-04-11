@@ -9,7 +9,6 @@ import {
 	sankeyLinkHorizontal,
 	sankeyRight,
 } from 'https://esm.sh/d3-sankey@0.12.3';
-import { format } from './utils.js';
 
 /** @typedef {import('https://esm.sh/d3-sankey@0.12.3').SankeyLink<{id: string, value: number}, {}>} Link */
 /** @typedef {import('https://esm.sh/d3-sankey@0.12.3').SankeyNode<{id: string, value: number}, {}>} Node */
@@ -93,7 +92,9 @@ const nodeGroup = (node) => {
 const nodeLabel = ({ id, value }) => {
 	const path = id.split('/').filter(Boolean).at(-1);
 
-	return `${path} (${format(Math.ceil(value / 1000))} kB)`;
+	return `${path} (${
+		Intl.NumberFormat('en-GB').format(Math.ceil(value / 1000))
+	} kB)`;
 };
 
 const marginLeft = 12;
