@@ -84,15 +84,19 @@ if (test) {
 	document.body.removeChild(loading);
 	clearInterval(dots);
 
+	const configBlock = document.getElementById('config');
+	const pageBlock = document.getElementById('page');
 	const urlLink = document.createElement('div');
-	urlLink.innerHTML = `<a href="${testUrl}">${testUrl}</a>`;
+	urlLink.innerHTML = `URL: <a href="${testUrl}">${testUrl}</a>`;
 	urlLink.className = 'test-url';
-	document.body.appendChild(urlLink);
+	pageBlock.innerHTML = `Test #: ${test}`
+	pageBlock.appendChild(urlLink);
+
 
 	const h2 = document.createElement('h2');
 	h2.innerHTML = from +
 		` <a href="https://www.webpagetest.org/result/${test}/">open</a>`;
-	document.body.appendChild(h2);
+	configBlock.appendChild(h2);
 
 	const perf = document.createElement('table');
 	perf.className = 'performance';
