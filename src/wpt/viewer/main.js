@@ -84,19 +84,30 @@ if (test) {
 	document.body.removeChild(loading);
 	clearInterval(dots);
 
-	const configBlock = document.getElementById('config');
-	const pageBlock = document.getElementById('page');
-	const urlLink = document.createElement('div');
-	urlLink.innerHTML = `URL: <a href="${testUrl}">${testUrl}</a>`;
-	urlLink.className = 'test-url';
-	pageBlock.innerHTML = `Test #: ${test}`
+	const ojHeader = document.getElementsByTagName("oj-header");
+	const pageBlock = document.createElement('div');
+	pageBlock.className = 'page';
+
+	const testLink = document.createElement('p');
+	testLink.innerHTML = `<span>Test #:</span> <a href="https://www.webpagetest.org/result/${test}/">${test}</a>`;
+	pageBlock.appendChild(testLink);
+
+	const urlLink = document.createElement('p');
+	urlLink.innerHTML = `<span>Page URL:</span> <a href="${testUrl}">${testUrl}</a>`;
 	pageBlock.appendChild(urlLink);
 
+	const configBlock = document.createElement('div');
+	configBlock.className = 'config';
 
-	const h2 = document.createElement('h2');
-	h2.innerHTML = from +
-		` <a href="https://www.webpagetest.org/result/${test}/">open</a>`;
-	configBlock.appendChild(h2);
+	const fromInfo = document.createElement('p');
+	fromInfo.innerHTML = from;
+	configBlock.appendChild(fromInfo);
+
+	ojHeader[0].appendChild(configBlock);
+	ojHeader[0].appendChild(pageBlock);
+		
+	const overviewBlock = document.createElement('section');
+	overviewBlock.className = 'overview';
 
 	const perf = document.createElement('table');
 	perf.className = 'performance';
@@ -118,8 +129,20 @@ if (test) {
 		row.appendChild(valueCell);
 		perf.appendChild(row);
 	}
-	document.body.appendChild(perf);
+	overviewBlock.appendChild(perf);
+	document.body.appendChild(overviewBlock);
 
+	const imgBlock = document.createElement('div');
+	imgBlock.className = 'device';
+	const image_src = get_image_src(test);
+	if (image_src) {
+		const img = document.createElement('img');
+		img.width = 211; // Half-width of Moto G4
+		img.src = image_src;
+		imgBlock.appendChild(img)
+		overviewBlock.appendChild(imgBlock);
+	}
+	
 	const ul = document.createElement('ul');
 	document.body.appendChild(ul);
 
@@ -136,13 +159,6 @@ if (test) {
 		document.body.appendChild(svg);
 	}
 
-	const image_src = get_image_src(test);
-	if (image_src) {
-		const img = document.createElement('img');
-		img.width = 211; // Half-width of Moto G4
-		img.src = image_src;
-		document.body.appendChild(img);
-	}
 } else {
 	const p = document.createElement('p');
 	p.innerText =
