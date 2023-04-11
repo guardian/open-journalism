@@ -14,12 +14,15 @@ body {
 	padding: 1rem;
 	font-size: 1rem;
 	line-height: 1.5;
-	--link-color: #FFC700 
+	--link-color: #fff
 }
 
 a {
 	color: var(--link-color);
-	text-decoration: none;
+	text-decoration: underline;
+	text-underline-offset: 0.25rem;
+	text-decoration-thickness: .5px;
+	transition: all 300ms ease-in-out;
 }
 
 a:hover {
@@ -54,6 +57,7 @@ oj-header .config span, oj-header .page span {
 }
 .overview {
 	display: flex;
+	align-items: flex-start;
 	gap: 1.5rem;
 }
 .device {
@@ -69,12 +73,14 @@ oj-header h1 {
 	font-family: "GuardianTextEgyptian";
 	font-weight: 500;
 	font-size: 2.5rem;
-	padding-left: .5rem;;
-	padding-right: .5rem;;
+	padding-left: .5rem;
+	padding-right: .5rem;
 }
 
 oj-header h1 a {
 	color: inherit;
+	text-underline-offset: 0.75rem;
+	text-decoration: none;
 }
 
 oj-header h1 a:hover {
