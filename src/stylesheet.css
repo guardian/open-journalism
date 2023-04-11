@@ -14,7 +14,7 @@ body {
 	padding: 1rem;
 	font-size: 16px;
 	line-height: 1.5;
-	--link-color: #C1D8FC
+	--link-color: #C1D8FC;
 }
 
 a {
@@ -53,7 +53,7 @@ oj-header nav li {
 }
 
 oj-header nav li + li:before {
-	content: ' / ';
+	content: " / ";
 	opacity: 0.3;
 }
 
@@ -65,5 +65,12 @@ h2 {
 
 ul {
 	list-style-position: inside;
-	list-style-type: '- ';
+	list-style-type: "- ";
+}
+
+footer {
+	max-width: 36rem;
+	border-top: 2px solid rgba(0,0,0, 0.25);
+	padding: 1rem 0;
+	margin: 1rem 0;
 }
