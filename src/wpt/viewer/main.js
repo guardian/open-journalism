@@ -1,7 +1,3 @@
-/**
- * Local development on http://localhost:4507/
- */
-
 import { get_result } from '../lib/get_result.js';
 import { get_image_src } from '../lib/get_image.js';
 import { chart } from './sankey.js';
