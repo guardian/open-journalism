@@ -1,7 +1,7 @@
 {
 	"tasks": {
 		"score": "deno run -A src/bigquery_score/scripts/bundle.ts",
-		"serve": "deno run --allow-net --allow-read https://deno.land/std@0.181.0/http/file_server.ts src/wpt/viewer # src/wpt/viewer/main.js",
+		"serve": "deno run --allow-net --allow-read https://deno.land/std@0.181.0/http/file_server.ts src",
 		"maintain-readme": "deno run -A scripts/maintain_readme.js"
 	},
 	"compilerOptions": {
