@@ -3,6 +3,7 @@
  */
 
 import { get_result } from '../lib/get_result.js';
+import { get_image_src } from '../lib/get_image.js';
 import { chart } from './sankey.js';
 
 const test = new URLSearchParams(window.location.search).get('test') ??
@@ -20,27 +21,57 @@ if (test) {
 
 	const { requests, from, performance, testUrl } = await get_result(test);
 
+	/** requests below this size will be grouped */
+	const threshold = requests.reduce((total, { objectSize }) =>
+		total + objectSize, 0) / 360;
+
+	/** requests below this size will be discarded */
+	const discard = 100;
+
+	const { above, below, discarded } = requests.reduce(
+		(accumulator, request) => {
+			if (request.objectSize > threshold) accumulator.above.push(request);
+			else if (request.objectSize > discard) accumulator.below.push(request);
+			else accumulator.discarded.push(request);
+			return accumulator;
+		},
+		{
+			above: /** @type {Requests} */ ([]),
+			below: /** @type {Requests} */ ([]),
+			discarded: /** @type {Requests} */ ([]),
+		},
+	);
+
+	if (discarded.length > 1) {
+		console.warn(
+			`The following ${discarded.length} requests were discarded:`,
+			discarded,
+		);
+	}
+
 	const filtered_requests = [
-		...requests
-			.filter(({ objectSize }) => objectSize > 1000),
-		...requests.filter(({ objectSize }) =>
-			objectSize < 1000 && objectSize > 100
-		)
+		above,
+		below
 			.reduce(
 				(others, request) => {
 					const maybe_request = others.find(({ request_type }) =>
 						request_type === request.request_type
 					);
-					if (maybe_request) maybe_request.objectSize += request.objectSize;
-					else {others.push({
+					if (maybe_request) {
+						maybe_request.objectSize += request.objectSize;
+						maybe_request.responseCode++;
+					} else {others.push({
 							...request,
-							full_url: '/… and smaller items',
+							responseCode: 1,
 						});}
 					return others;
 				},
 				/** @type {Requests} */ ([]),
-			),
-	];
+			).map((request) => ({
+				...request,
+				full_url: `… and ${request.responseCode} smaller requests`,
+			})),
+	].flat();
 
 	const { nodes, links } = get_nodes_and_links(
 		filtered_requests
@@ -103,6 +134,14 @@ if (test) {
 	);
 	if (svg) {
 		document.body.appendChild(svg);
+	}
+
+	const image_src = get_image_src(test);
+	if (image_src) {
+		const img = document.createElement('img');
+		img.width = 211; // Half-width of Moto G4
+		img.src = image_src;
+		document.body.appendChild(img);
 	}
 } else {
 	const p = document.createElement('p');

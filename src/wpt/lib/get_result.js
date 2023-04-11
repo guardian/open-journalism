@@ -25,8 +25,6 @@ export const get_result = async (test) => {
 		runs: { 1: run },
 	} = result;
 
-	console.log(run);
-
 	const step = run.firstView.numSteps === 1
 		? run.firstView
 		: run.firstView.steps[0];
