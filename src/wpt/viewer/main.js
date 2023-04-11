@@ -2,7 +2,7 @@
  * Local development on http://localhost:4507/
  */
 
-import { get_result } from './lib/get_result.js';
+import { get_result } from '../lib/get_result.js';
 import { chart } from './sankey.js';
 
 const test = new URLSearchParams(window.location.search).get('test') ??
@@ -131,9 +131,9 @@ if (test) {
 	}
 }
 
-/** @typedef {import('./lib/get_result.parser.js').Request[]} Requests */
+/** @typedef {import('../lib/get_result.parser.js').Request[]} Requests */
 
-/** @type {(type: import('./lib/get_result.parser.js').Request["request_type"]) => "Script" | "Document" | "Font" | "Media" | "Other"} */
+/** @type {(type: import('../lib/get_result.parser.js').Request["request_type"]) => "Script" | "Document" | "Font" | "Media" | "Other"} */
 function reduced_types(type) {
 	switch (type) {
 		case 'Script':
