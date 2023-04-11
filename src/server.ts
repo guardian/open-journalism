@@ -1,3 +1,7 @@
+/**
+ * Local development on http://localhost:4507/open-journalism/
+ */
+
 import { serve } from 'https://deno.land/std@0.181.0/http/server.ts';
 import { serveDir } from 'https://deno.land/std@0.181.0/http/file_server.ts';
 import { fromFileUrl } from 'https://deno.land/std@0.182.0/path/mod.ts';
