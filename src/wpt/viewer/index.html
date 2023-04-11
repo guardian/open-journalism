@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Guardian &times; WebPageTest</title>
+	<link rel="icon" href="/open-journalism/favicon.svg">
+	<link href="https://assets.guim.co.uk/static/frontend/fonts/font-faces.css" rel="stylesheet" />
+	<link rel="stylesheet" href="/open-journalism/stylesheet.css">
+	<script src="/open-journalism/oj-header.js"></script>
+	<style>
+		h2 {
+			padding-bottom: 3px;
+			position: relative;
+			opacity: 0.5;
+		}
+
+		h2 b {
+			font-weight: normal;
+		}
+
+		.test-url {
+			font-family: "GuardianTextSans";
+			font-size: large;
+			padding-top: 10px;
+			font-size: medium;
+		}
+
+		.performance {
+			list-style: none;
+			font-family: "GuardianTextSans";
+			font-size: small;
+			padding-top: 20px;
+		}
+
+		.performance th {
+			text-align: left;
+			text-transform: uppercase;
+		}
+
+		.performance td {
+			text-align: right;
+			padding-left: 10px;
+		}
+
+		.right {
+			text-align: right;
+		}
+
+		tbody tr:nth-of-type(odd) {
+			background-color: rgba(255, 255, 255, 0.12);
+		}
+
+		svg {
+			margin-left: -10px;
+		}
+
+		svg text {
+			fill: CanvasText;
+			font-family: "GuardianTextSans";
+		}
+	</style>
+</head>
+
+<body>
+	<oj-header></oj-header>
+	<script type="module" src="./main.js"></script>
+</body>
+
+</html>
