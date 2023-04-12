@@ -84,16 +84,18 @@ if (test) {
 	document.body.removeChild(loading);
 	clearInterval(dots);
 
-	const ojHeader = document.getElementsByTagName("oj-header");
+	const ojHeader = document.getElementsByTagName('oj-header');
 	const pageBlock = document.createElement('div');
 	pageBlock.className = 'page';
 
 	const testLink = document.createElement('p');
-	testLink.innerHTML = `<span>Test #:</span> <a href="https://www.webpagetest.org/result/${test}/">${test}</a>`;
+	testLink.innerHTML = 
+	`<span>Test #:</span> <a href="https://www.webpagetest.org/result/${test}/">${test}</a>`;
 	pageBlock.appendChild(testLink);
 
 	const urlLink = document.createElement('p');
-	urlLink.innerHTML = `<span>Page URL:</span> <a href="${testUrl}">${testUrl}</a>`;
+	urlLink.innerHTML = 
+	`<span>Page URL:</span> <a href="${testUrl}">${testUrl}</a>`;
 	pageBlock.appendChild(urlLink);
 
 	const configBlock = document.createElement('div');
@@ -139,10 +141,10 @@ if (test) {
 		const img = document.createElement('img');
 		img.width = 211; // Half-width of Moto G4
 		img.src = image_src;
-		imgBlock.appendChild(img)
+		imgBlock.appendChild(img);
 		overviewBlock.appendChild(imgBlock);
 	}
-	
+
 	const ul = document.createElement('ul');
 	document.body.appendChild(ul);
 
