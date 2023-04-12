@@ -35,23 +35,29 @@ a:hover {
 }
 oj-header {
 	display: grid;
-	grid-template-columns: min-content 1fr;
-	grid-template-rows: [title] 1fr [config] 1fr [page] 1fr;
+	grid-template-columns: 1fr;
+	grid-template-rows: [title] auto [nav] auto [config] auto [page] auto;
 	border-left: 1px solid #999999;
-	padding-bottom: 1rem;
+}
+oj-header, .overview {
+	margin-bottom: 2rem;
 }
 .config {
 	grid-column: 1;
-	grid-row: 2;
+	grid-row: config;
 }
 .page {
 	grid-column: 1;
-	grid-row: 3;
+	grid-row: page;
 }
-oj-header .config, oj-header .page  {
-	padding-top: 8px;
-	padding-bottom: 4px;
-	padding-left: 8px;
+.page a {
+	word-break: break-word;
+}
+.config, .page  {
+	padding-top: .5rem;
+	padding-bottom: 1rem;
+	padding-left: .5rem;
+	max-width: 100%;
 }
 oj-header .config span, oj-header .page span {
 	width: 80px;
@@ -62,6 +68,7 @@ oj-header .config span, oj-header .page span {
 }
 .overview {
 	display: flex;
+	flex-direction: column-reverse;
 	align-items: flex-start;
 	gap: 1.5rem;
 }
@@ -73,21 +80,19 @@ oj-header .config span, oj-header .page span {
 .device .moto {
 
 }
-
-oj-header h1 {
+h1 {
+	grid-row: title;
 	font-family: "GuardianTextEgyptian";
 	font-weight: 500;
 	font-size: 2.5rem;
-	padding-left: .5rem;
-	padding-right: .5rem;
-	padding-left: .5rem;
-	padding-right: .5rem;
+	line-height: 1.15;
+	padding-bottom: 2rem;
 }
-
+oj-header h1, oj-header nav {
+	padding-left: .5rem;
+}
 oj-header h1 a {
 	color: inherit;
-	text-underline-offset: 0.75rem;
-	text-decoration: none;
 	text-underline-offset: 0.75rem;
 	text-decoration: none;
 }
@@ -95,14 +100,15 @@ oj-header h1 a {
 oj-header h1 a:hover {
 	color: var(--link-color);
 }
-
 oj-header nav {
-
-
+	grid-row: nav;
+	padding: .5rem;
+	padding-bottom: 1rem;
 }
-
-oj-header nav li {
-	display: inline;
+oj-header nav ul {
+	display: flex;
+	gap: .5rem;
+	list-style: none;
 }
 
 oj-header nav li + li:before {
@@ -123,6 +129,69 @@ ul {
 	list-style-type: "- ";
 }
 
+h2 {
+	/* padding-bottom: 3px; */
+	position: relative;
+	/* opacity: 0.5; */
+}
+
+h2 b {
+	font-weight: normal;
+}
+
+.test-url {
+	font-family: "GuardianTextSans";
+	font-size: large;
+	padding-top: .5rem;;
+	font-size: medium;
+}
+
+.performance {
+	list-style: none;
+	font-family: "GuardianTextSans";
+	font-size: small;
+	border-spacing: 0 1rem;
+}
+
+.performance th {
+	text-align: left;
+	text-transform: uppercase;
+	border-left: 1px solid #999999;
+	padding-left: .5rem;
+	vertical-align: top;
+}
+
+.performance td {
+	padding-left: .5rem;
+	font-size: 3rem;
+	line-height: 1;
+	color: #10C8A7;
+	padding-bottom: 1rem;
+}
+
+.right {
+	text-align: right;
+}
+
+tbody tr:nth-of-type(odd) {
+	background-color: rgba(255, 255, 255, 0.12);
+}
+
+svg {
+	margin-left: -10px;
+}
+
+svg text {
+	fill: CanvasText;
+	font-family: "GuardianTextSans";
+}
+
+@media only screen and (min-width: 960px) {
+
+	.performance td {
+		font-size: 5rem;
+	}
+}
 footer {
 	max-width: 36rem;
 	border-top: 2px solid rgba(0,0,0, 0.25);
@@ -130,50 +199,49 @@ footer {
 	margin: 1rem 0;
 }
 
-@media only screen and (min-width: 960px) {
-	oj-header {
-		grid-template-columns: [title] 1fr [config] 320px [page] 1fr;
-		grid-template-rows: min-content 1fr;
-		border-top: 1px solid #999999;
-		border-left: none;
-	}
-	h1 {
-		padding-left: 0;
-	}
-	.config {
-		grid-column: 2;
-		grid-row: 1;
-	}
-	.page {
-		grid-column: 3;
-		grid-row: 1;
-	}
-	.config, .page {
-		border-left: 1px solid #999999;
-		border-top: none;
+@media only screen and (min-width: 740px) {
+	.overview {
+		flex-direction: row;
+		gap: 4rem;
 	}
 }
-
 @media only screen and (min-width: 960px) {
 	oj-header {
-		grid-template-columns: [title] 1fr [config] 320px [page] 1fr;
-		grid-template-rows: min-content 1fr;
+		grid-template-columns:  1fr 1fr 1fr 1fr;
+		grid-template-rows: min-content min-content;
 		border-top: 1px solid #999999;
 		border-left: none;
 	}
 	h1 {
 		padding-left: 0;
 	}
-	.config {
-		grid-column: config;
+	oj-header h1 {
+		grid-column-start: 1;
+		grid-column-end: 3;
 		grid-row: 1;
+		padding-left: 0;
+	}
+	oj-header nav {
+		grid-column-start: 3;
+		grid-column-end: 4;
+		grid-row: 1;
+	}
+	.config {
+		grid-column-start: 1;
+		grid-column-end: 1;
+		grid-row: 2;
+		padding-left: 0;
+		padding-right: .5rem;
 	}
 	.page {
-		grid-column: page;
-		grid-row: 1;
+		grid-column-start: 2;
+		grid-column-end: 5;
+		grid-row: 2;
+		padding-right: .5rem;
 	}
-	.config, .page {
+	/* .config,  */
+	nav, .page {
 		border-left: 1px solid #999999;
-		border-top: none;
+		/* border-top: none; */
 	}
 }
