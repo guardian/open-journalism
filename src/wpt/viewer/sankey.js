@@ -26,7 +26,7 @@ const colour_mappings = /** @type {const} */ ({
 	everything: '#FFC700',
 });
 
-/** @param node {MaybeNode} */
+/** @param {MaybeNode} node */
 const colour = (node) => colour_mappings[nodeGroup(node)];
 
 const nodeGroups = Object.keys(colour_mappings);
@@ -40,22 +40,17 @@ const nodeGroup = (node) => {
 	const [type, , , domain] = node.id.split('/');
 
 	switch (type) {
-		case 'Script': {
-			if (
-				[
-					'assets.guim.co.uk',
-					'interactive.guim.co.uk',
-					'contributions.guardianapis.com',
-					'sourcepoint.theguardian.com',
-				].includes(domain)
-			) {
-				return 'js-1st';
-			} else if (domain) {
-				return 'js-3rd';
-			} else {
-				return 'js';
-			}
-		}
+		case 'Script':
+			return domain
+				? [
+						'assets.guim.co.uk',
+						'interactive.guim.co.uk',
+						'contributions.guardianapis.com',
+						'sourcepoint.theguardian.com',
+					].includes(domain)
+					? 'js-1st'
+					: 'js-3rd'
+				: 'js';
 
 		case 'Document':
 			return 'html';
@@ -79,7 +74,7 @@ const nodeGroup = (node) => {
 	}
 };
 
-/** @param node {Node} */
+/** @param {Node} node */
 const nodeLabel = ({ id, value }) => {
 	const path = id.split('/').filter(Boolean).at(-1);
 
@@ -113,6 +108,31 @@ const sankey_layout =
 			return group_difference === 0 ? b.value - a.value : group_difference;
 		});
 
+export const legend = () => {
+	const ul = document.createElement('ul');
+	ul.classList.add('legend');
+
+	for (
+		const id of [
+			'Script',
+			'Document',
+			'Media',
+			'Font',
+			'Other',
+			'Everything else',
+		]
+	) {
+		const li = document.createElement('li');
+
+		li.innerText = id;
+		li.style.setProperty('--colour', colour({ id, value: 0 }));
+
+		ul.appendChild(li);
+	}
+
+	return ul;
+};
+
 /** @type {(ops: {nodes: Node[], links: Link[], height: number, padding: number}) => SVGSVGElement | null}} */
 export const chart = ({ nodes, links, height, padding }) => {
 	sankey_layout
@@ -120,7 +140,10 @@ export const chart = ({ nodes, links, height, padding }) => {
 		.extent([
 			[marginLeft, marginTop],
 			[width - marginRight, height - marginBottom],
-		]).nodeId(({ index = -1 }) => nodes[index]?.id)({ nodes, links });
+		]).nodeId(({ index = -1 }) => nodes[index]?.id ?? 'not found')({
+			nodes,
+			links,
+		});
 
 	// A unique identifier for clip paths (to avoid conflicts).
 	const uid = `O-${Math.random().toString(16).slice(2)}`;
@@ -138,7 +161,7 @@ export const chart = ({ nodes, links, height, padding }) => {
 		.call((gradient) =>
 			gradient
 				.append('stop')
-				.attr('offset', '72%')
+				.attr('offset', `96%`)
 				.attr('stop-color', 'white')
 		).call((gradient) =>
 			gradient
@@ -149,9 +172,9 @@ export const chart = ({ nodes, links, height, padding }) => {
 
 	defs.append('mask').attr('id', 'mask')
 		.append('rect')
-		.attr('width', marginRight)
+		.attr('width', width)
 		.attr('height', height)
-		.attr('x', width - marginRight).attr('fill', 'url(#gradient)');
+		.attr('fill', 'url(#gradient)');
 
 	const node = svg
 		.append('g')
