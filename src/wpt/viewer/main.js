@@ -89,11 +89,11 @@ if (test) {
 	pageBlock.className = 'page';
 
 	const testLink = document.createElement('p');
-	testLink.innerHTML = `<a href="https://www.webpagetest.org/result/${test}/">${test}</a>`;
+	testLink.innerHTML = `<span>Test #:</span> <a href="https://www.webpagetest.org/result/${test}/">${test}</a>`;
 	pageBlock.appendChild(testLink);
 
 	const urlLink = document.createElement('p');
-	urlLink.innerHTML = `<a href="${testUrl}">${testUrl}</a>`;
+	urlLink.innerHTML = `<span>Page URL:</span> <a href="${testUrl}">${testUrl}</a>`;
 	pageBlock.appendChild(urlLink);
 
 	const configBlock = document.createElement('div');
