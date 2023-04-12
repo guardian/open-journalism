@@ -40,22 +40,17 @@ const nodeGroup = (node) => {
 	const [type, , , domain] = node.id.split('/');
 
 	switch (type) {
-		case 'Script': {
-			if (
-				[
-					'assets.guim.co.uk',
-					'interactive.guim.co.uk',
-					'contributions.guardianapis.com',
-					'sourcepoint.theguardian.com',
-				].includes(domain)
-			) {
-				return 'js-1st';
-			} else if (domain) {
-				return 'js-3rd';
-			} else {
-				return 'js';
-			}
-		}
+		case 'Script':
+			return domain
+				? [
+						'assets.guim.co.uk',
+						'interactive.guim.co.uk',
+						'contributions.guardianapis.com',
+						'sourcepoint.theguardian.com',
+					].includes(domain)
+					? 'js-1st'
+					: 'js-3rd'
+				: 'js';
 
 		case 'Document':
 			return 'html';
@@ -120,7 +115,10 @@ export const chart = ({ nodes, links, height, padding }) => {
 		.extent([
 			[marginLeft, marginTop],
 			[width - marginRight, height - marginBottom],
-		]).nodeId(({ index = -1 }) => nodes[index]?.id)({ nodes, links });
+		]).nodeId(({ index = -1 }) => nodes[index]?.id ?? 'not found')({
+			nodes,
+			links,
+		});
 
 	// A unique identifier for clip paths (to avoid conflicts).
 	const uid = `O-${Math.random().toString(16).slice(2)}`;
