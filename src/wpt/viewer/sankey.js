@@ -26,7 +26,7 @@ const colour_mappings = /** @type {const} */ ({
 	everything: '#FFC700',
 });
 
-/** @param node {MaybeNode} */
+/** @param {MaybeNode} node */
 const colour = (node) => colour_mappings[nodeGroup(node)];
 
 const nodeGroups = Object.keys(colour_mappings);
@@ -74,7 +74,7 @@ const nodeGroup = (node) => {
 	}
 };
 
-/** @param node {Node} */
+/** @param {Node} node */
 const nodeLabel = ({ id, value }) => {
 	const path = id.split('/').filter(Boolean).at(-1);
 
@@ -107,6 +107,31 @@ const sankey_layout =
 
 			return group_difference === 0 ? b.value - a.value : group_difference;
 		});
+
+export const legend = () => {
+	const ul = document.createElement('ul');
+	ul.classList.add('legend');
+
+	for (
+		const id of [
+			'Script',
+			'Document',
+			'Media',
+			'Font',
+			'Other',
+			'Everything else',
+		]
+	) {
+		const li = document.createElement('li');
+
+		li.innerText = id;
+		li.style.setProperty('--colour', colour({ id, value: 0 }));
+
+		ul.appendChild(li);
+	}
+
+	return ul;
+};
 
 /** @type {(ops: {nodes: Node[], links: Link[], height: number, padding: number}) => SVGSVGElement | null}} */
 export const chart = ({ nodes, links, height, padding }) => {

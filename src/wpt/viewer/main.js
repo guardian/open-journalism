@@ -1,6 +1,6 @@
 import { get_result } from '../lib/get_result.js';
 import { get_image_src } from '../lib/get_image.js';
-import { chart } from './sankey.js';
+import { chart, legend } from './sankey.js';
 
 const test = new URLSearchParams(window.location.search).get('test') ??
 	undefined;
@@ -145,8 +145,7 @@ if (test) {
 		overviewBlock.appendChild(imgBlock);
 	}
 
-	const ul = document.createElement('ul');
-	document.body.appendChild(ul);
+	document.body.appendChild(legend());
 
 	const svg = chart(
 		{
