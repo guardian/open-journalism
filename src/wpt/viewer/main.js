@@ -84,7 +84,7 @@ if (test) {
 	document.body.removeChild(loading);
 	clearInterval(dots);
 
-	const ojHeader = document.getElementsByTagName('oj-header');
+	const ojHeader = document.querySelector('oj-header');
 	const pageBlock = document.createElement('div');
 	pageBlock.className = 'page';
 
@@ -103,8 +103,8 @@ if (test) {
 	fromInfo.innerHTML = from;
 	configBlock.appendChild(fromInfo);
 
-	ojHeader[0].appendChild(configBlock);
-	ojHeader[0].appendChild(pageBlock);
+	ojHeader.appendChild(configBlock);
+	ojHeader.appendChild(pageBlock);
 		
 	const overviewBlock = document.createElement('section');
 	overviewBlock.className = 'overview';
