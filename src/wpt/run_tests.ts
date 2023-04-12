@@ -1,9 +1,21 @@
-// import { WPTLocations } from "./@types/WPTLocation.ts";
-import { test_url } from "./lib/test_url.ts";
+/**
+ * Run a semi-standardised webpage test against an article.
+ *
+ * If you pass a URL, it will use that instead.
+ *
+ * @example
+ * ```
+ * deno task wpt
+ * deno task wpt https://my.url.com
+ *
+ * ```
+ */
+import { test_url } from './lib/test_url.ts';
 
-const url =
-	Deno.args[0] ??
-	"https://www.theguardian.com/lifeandstyle/2023/mar/29/katherine-may-i-was-a-tiny-speck-in-a-vast-universe-enchantment";
+const defaultURL =
+	'https://www.theguardian.com/lifeandstyle/2023/mar/29/katherine-may-i-was-a-tiny-speck-in-a-vast-universe-enchantment';
+
+const url = Deno.args[0] ?? defaultURL;
 
 try {
 	await test_url(url, {
