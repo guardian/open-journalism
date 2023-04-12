@@ -161,7 +161,7 @@ export const chart = ({ nodes, links, height, padding }) => {
 		.call((gradient) =>
 			gradient
 				.append('stop')
-				.attr('offset', '72%')
+				.attr('offset', `96%`)
 				.attr('stop-color', 'white')
 		).call((gradient) =>
 			gradient
@@ -172,9 +172,9 @@ export const chart = ({ nodes, links, height, padding }) => {
 
 	defs.append('mask').attr('id', 'mask')
 		.append('rect')
-		.attr('width', marginRight)
+		.attr('width', width)
 		.attr('height', height)
-		.attr('x', width - marginRight).attr('fill', 'url(#gradient)');
+		.attr('fill', 'url(#gradient)');
 
 	const node = svg
 		.append('g')
