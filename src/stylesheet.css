@@ -166,8 +166,19 @@ h2 b {
 	padding-left: .5rem;
 	font-size: 3rem;
 	line-height: 1;
-	color: #10C8A7;
 	padding-bottom: 1rem;
+}
+
+.performance td.good {
+	color: #10C8A7;
+}
+
+.performance td.needs-improvement {
+	color: #E38800;
+}
+
+.performance td.poor {
+	color: #FF3D00;
 }
 
 .right {

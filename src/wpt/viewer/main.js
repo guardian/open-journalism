@@ -1,6 +1,7 @@
 import { get_result } from '../lib/get_result.js';
 import { get_image_src } from '../lib/get_image.js';
 import { chart, legend } from './sankey.js';
+import { get_web_vitals_score, is_metric } from '../../bigquery_score/score.js';
 
 const test = new URLSearchParams(window.location.search).get('test') ??
 	undefined;
@@ -114,21 +115,38 @@ if (test) {
 	const perf = document.createElement('table');
 	perf.className = 'performance';
 	for (const [key, value] of Object.entries(performance)) {
-		if (typeof value !== 'number') {
+		if (typeof value !== 'number' || !is_metric(key)) {
 			continue;
 		}
 		const row = document.createElement('tr');
-		const keyCell = document.createElement('th');
-		const valueCell = document.createElement('td');
-		keyCell.innerText = key;
+		const cell_key = document.createElement('th');
+		const cell_value = document.createElement('td');
+		const cell_score = document.createElement('td');
 
+		cell_key.innerText = key;
+
+		const score = get_web_vitals_score(key, value);
 		const formatted_value = value > 1
 			? `${Intl.NumberFormat('en-GB').format(value / 1000)}s`
 			: `${Math.round(value * 100 * 10) / 10}%`;
+		cell_value.innerText = `${Math.floor(score)} – ${formatted_value}`;
 
-		valueCell.innerText = formatted_value;
-		row.appendChild(keyCell);
-		row.appendChild(valueCell);
+		if (typeof score === 'number') {
+			cell_score.innerText = Math.floor(score).toString();
+			if (score > 90) {
+				cell_score.classList.add('good');
+			} else if (score > 50) {
+				cell_score.classList.add('needs-improvement');
+			} else {
+				cell_score.classList.add('poor');
+			}
+		}
+
+		console.log({ score });
+
+		row.appendChild(cell_key);
+		row.appendChild(cell_value);
+		row.appendChild(cell_score);
 		perf.appendChild(row);
 	}
 	overviewBlock.appendChild(perf);
