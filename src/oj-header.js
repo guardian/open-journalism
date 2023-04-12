@@ -1,6 +1,9 @@
 const base = '/open-journalism/';
 
-const pages = { 'wpt/viewer/': 'Guardian &times; WebPageTest' };
+const pages = /** @type {const} */ ({
+	'': 'Home',
+	'wpt/viewer/': 'Guardian &times; WebPageTest',
+});
 
 class Header extends HTMLElement {
 	// connect component

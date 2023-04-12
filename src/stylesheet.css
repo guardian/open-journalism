@@ -13,12 +13,17 @@ html {
 body {
 	padding: 1rem;
 	font-size: 1rem;
+	font-size: 1rem;
 	line-height: 1.5;
-	--link-color: #fff
+	--link-color: white;
 }
 
 a {
 	color: var(--link-color);
+	text-decoration: underline;
+	text-underline-offset: 0.25rem;
+	text-decoration-thickness: .5px;
+	transition: all 300ms ease-in-out;
 	text-decoration: underline;
 	text-underline-offset: 0.25rem;
 	text-decoration-thickness: .5px;
@@ -75,10 +80,14 @@ oj-header h1 {
 	font-size: 2.5rem;
 	padding-left: .5rem;
 	padding-right: .5rem;
+	padding-left: .5rem;
+	padding-right: .5rem;
 }
 
 oj-header h1 a {
 	color: inherit;
+	text-underline-offset: 0.75rem;
+	text-decoration: none;
 	text-underline-offset: 0.75rem;
 	text-decoration: none;
 }
@@ -89,6 +98,7 @@ oj-header h1 a:hover {
 
 oj-header nav {
 
+
 }
 
 oj-header nav li {
@@ -96,7 +106,7 @@ oj-header nav li {
 }
 
 oj-header nav li + li:before {
-	content: ' / ';
+	content: " / ";
 	opacity: 0.3;
 }
 
@@ -105,11 +115,43 @@ h2 {
 	font-weight: 500;
 	font-size: 1rem;
 	line-height: 1.15;
+	line-height: 1.15;
 }
 
 ul {
 	list-style-position: inside;
-	list-style-type: '- ';
+	list-style-type: "- ";
+}
+
+footer {
+	max-width: 36rem;
+	border-top: 2px solid rgba(0,0,0, 0.25);
+	padding: 1rem 0;
+	margin: 1rem 0;
+}
+
+@media only screen and (min-width: 960px) {
+	oj-header {
+		grid-template-columns: [title] 1fr [config] 320px [page] 1fr;
+		grid-template-rows: min-content 1fr;
+		border-top: 1px solid #999999;
+		border-left: none;
+	}
+	h1 {
+		padding-left: 0;
+	}
+	.config {
+		grid-column: 2;
+		grid-row: 1;
+	}
+	.page {
+		grid-column: 3;
+		grid-row: 1;
+	}
+	.config, .page {
+		border-left: 1px solid #999999;
+		border-top: none;
+	}
 }
 
 @media only screen and (min-width: 960px) {
