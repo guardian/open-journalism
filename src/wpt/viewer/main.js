@@ -105,10 +105,8 @@ if (test) {
 	fromInfo.innerHTML = from;
 	configBlock.appendChild(fromInfo);
 
-	// @ts-ignore
-	ojHeader.appendChild(configBlock);
-	// @ts-ignore
-	ojHeader.appendChild(pageBlock);
+	ojHeader?.appendChild(configBlock);
+	ojHeader?.appendChild(pageBlock);
 
 	const overviewBlock = document.createElement('section');
 	overviewBlock.className = 'overview';
