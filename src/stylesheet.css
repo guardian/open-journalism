@@ -74,13 +74,13 @@ oj-header .config span, oj-header .page span {
 	gap: 1.5rem;
 }
 .device {
-	background-image: url("/open-journalism/img/Moto-G4-trans-3.webp");
 	background-size: cover;
+}
+.device.moto-g4 {
+	background-image: url("/open-journalism/img/Moto-G4-trans-3.webp");
 	padding: 100px 15px 72px 12px;
 }
-.device .moto {
 
-}
 h1 {
 	grid-row: title;
 	font-family: "GuardianTextEgyptian";
@@ -166,8 +166,19 @@ h2 b {
 	padding-left: .5rem;
 	font-size: 3rem;
 	line-height: 1;
-	color: #10C8A7;
 	padding-bottom: 1rem;
+}
+
+.performance td.good {
+	color: #10C8A7;
+}
+
+.performance td.needs-improvement {
+	color: #E38800;
+}
+
+.performance td.poor {
+	color: #FF3D00;
 }
 
 .right {

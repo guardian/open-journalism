@@ -1,32 +1,31 @@
 import { assertEquals } from 'https://deno.land/std@0.180.0/testing/asserts.ts';
 
-import { getScore } from './score.ts';
+import { get_web_vitals_score, is_metric } from './score.js';
 
 Deno.test('FID', () => {
-	assertEquals(getScore('FID', 0), 100);
-	assertEquals(getScore('FID', 100), 90);
-	assertEquals(getScore('FID', 300), 50);
+	assertEquals(get_web_vitals_score('fid', 0), 100);
+	assertEquals(get_web_vitals_score('fid', 100), 90);
+	assertEquals(get_web_vitals_score('fid', 300), 50);
 });
 
 Deno.test('CLS', () => {
-	assertEquals(getScore('CLS', 0), 100);
-	assertEquals(getScore('CLS', 0.1), 90);
-	assertEquals(getScore('CLS', 0.25), 50);
+	assertEquals(get_web_vitals_score('cls', 0), 100);
+	assertEquals(get_web_vitals_score('cls', 0.1), 90);
+	assertEquals(get_web_vitals_score('cls', 0.25), 50);
 });
 
 Deno.test('LCP', () => {
-	assertEquals(getScore('LCP', 0), 100);
-	assertEquals(getScore('LCP', 2500), 90);
-	assertEquals(getScore('LCP', 4000), 50);
+	assertEquals(get_web_vitals_score('lcp', 0), 100);
+	assertEquals(get_web_vitals_score('lcp', 2500), 90);
+	assertEquals(get_web_vitals_score('lcp', 4000), 50);
 });
 
 Deno.test('TTFB', () => {
-	assertEquals(getScore('TTFB', 0), 100);
-	assertEquals(getScore('TTFB', 800), 90);
-	assertEquals(getScore('TTFB', 1800), 50);
+	assertEquals(get_web_vitals_score('ttfb', 0), 100);
+	assertEquals(get_web_vitals_score('ttfb', 800), 90);
+	assertEquals(get_web_vitals_score('ttfb', 1800), 50);
 });
 
 Deno.test('Returns undefined for invalid metrics', () => {
-	// @ts-expect-error -- only valid values will work
-	assertEquals(getScore('INCORRECT', 0), undefined);
+	assertEquals(is_metric('INCORRECT'), false);
 });

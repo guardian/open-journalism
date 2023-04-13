@@ -115,17 +115,31 @@ export const legend = () => {
 	for (
 		const id of [
 			'Script',
+			'Script/https://assets.guim.co.uk/',
+			'Script/https://www.google.com/',
+			'Everything else',
 			'Document',
 			'Media',
 			'Font',
 			'Other',
-			'Everything else',
 		]
 	) {
 		const li = document.createElement('li');
-
-		li.innerText = id;
 		li.style.setProperty('--colour', colour({ id, value: 0 }));
+		switch (id) {
+			case 'Script/https://assets.guim.co.uk/': {
+				li.innerText = '1st party';
+				break;
+			}
+			case 'Script/https://www.google.com/': {
+				li.innerText = '3rd party';
+				break;
+			}
+			default: {
+				li.innerText = id;
+				break;
+			}
+		}
 
 		ul.appendChild(li);
 	}
