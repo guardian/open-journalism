@@ -154,7 +154,7 @@ if (test) {
 
 	const figure = document.createElement('figure');
 	figure.classList.add('device');
-	figure.classList.add('default')
+	figure.classList.add('default');
 	if (from.includes('Motorola G (gen 4)')) figure.classList.add('moto-g4'), figure.classList.remove('default');
 	if (from.includes('iPhone')) figure.classList.add('iphone'), figure.classList.remove('default');
 
