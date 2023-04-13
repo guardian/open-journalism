@@ -1,15 +1,12 @@
 <script>
+	import { pages } from "../routes";
+
 	const getPath = (/** @type {string?} */ route = "") =>
 		`/open-journalism${route}`;
 
 	/** @type {string} */
 	export let current_route;
 	const current_path = getPath(current_route);
-
-	const pages = /** @type {const} */ ({
-		"/": "Home",
-		"/wpt/viewer/": "Guardian × WebPageTest",
-	});
 </script>
 
 <h1><a href="${getPath('/')}">@guardian/open-journalism</a></h1>
