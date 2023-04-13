@@ -5,7 +5,7 @@ export const pages = /** @type {const} */ ({
 
 if (import.meta.main) {
 	const start = performance.now();
-	const template = await Deno.readTextFile('./src/index.html');
+	const template = await Deno.readTextFile('./src/_site/index.html');
 	console.log('');
 	for (const route of Object.keys(pages)) {
 		const { html, css: { code: css } } =
