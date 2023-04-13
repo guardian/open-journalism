@@ -74,13 +74,13 @@ oj-header .config span, oj-header .page span {
 	gap: 1.5rem;
 }
 .device {
-	background-image: url("/open-journalism/img/Moto-G4-trans-3.webp");
 	background-size: cover;
+}
+.device.moto-g4 {
+	background-image: url("/open-journalism/img/Moto-G4-trans-3.webp");
 	padding: 100px 15px 72px 12px;
 }
-.device .moto {
 
-}
 h1 {
 	grid-row: title;
 	font-family: "GuardianTextEgyptian";

@@ -152,15 +152,18 @@ if (test) {
 	overviewBlock.appendChild(perf);
 	document.body.appendChild(overviewBlock);
 
-	const imgBlock = document.createElement('div');
-	imgBlock.className = 'device';
+	const figure = document.createElement('figure');
+	figure.classList.add('device');
+	if (from.includes('Motorola G (gen 4)')) figure.classList.add('moto-g4');
+	if (from.includes('iPhone')) figure.classList.add('iphone');
+
 	const image_src = get_image_src(test);
 	if (image_src) {
 		const img = document.createElement('img');
 		img.width = 211; // Half-width of Moto G4
 		img.src = image_src;
-		imgBlock.appendChild(img);
-		overviewBlock.appendChild(imgBlock);
+		figure.appendChild(img);
+		overviewBlock.appendChild(figure);
 	}
 
 	document.body.appendChild(legend());
