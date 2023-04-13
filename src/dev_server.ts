@@ -30,6 +30,7 @@ await serve(
 					},
 				);
 			} catch (_) {
+				console.error(_);
 				return serveFile(req, './src/_site/build/' + file);
 			}
 		} else if (url.searchParams.get('test')) {

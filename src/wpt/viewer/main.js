@@ -3,8 +3,11 @@ import { get_image_src } from '../lib/get_image.js';
 import { chart, legend } from './sankey.js';
 import { get_web_vitals_score, is_metric } from '../../bigquery_score/score.js';
 
-const test = new URLSearchParams(window.location.search).get('test') ??
-	undefined;
+const test =
+	new URLSearchParams(
+		typeof window !== 'undefined' ? window.location.search : '',
+	).get('test') ??
+		undefined;
 
 const padding = 6;
 
