@@ -1,8 +1,10 @@
 {
 	"tasks": {
 		"score": "deno run -A src/bigquery_score/scripts/bundle.ts",
-		"serve": "deno run --allow-net --allow-read --watch src/dev_server.ts",
-		"maintain-readme": "deno run -A scripts/maintain_readme.js"
+		"serve": "deno task lume -s",
+		"maintain-readme": "deno run -A scripts/maintain_readme.js",
+		"lume": "echo \"import 'lume/cli.ts'\" | deno run --unstable -A -",
+		"build": "deno task lume"
 	},
 	"compilerOptions": {
 		"lib": ["dom", "dom.iterable", "deno.ns"],
@@ -23,5 +25,8 @@
 		"files": {
 			"exclude": ["build", "cache"]
 		}
+	},
+	"imports": {
+		"lume/": "https://deno.land/x/lume@v1.16.2/"
 	}
 }
