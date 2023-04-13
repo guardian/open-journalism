@@ -3,21 +3,27 @@
  */
 
 import { serve } from 'https://deno.land/std@0.181.0/http/server.ts';
-import { serveDir } from 'https://deno.land/std@0.181.0/http/file_server.ts';
-import { fromFileUrl } from 'https://deno.land/std@0.182.0/path/mod.ts';
 
 const port = 4507;
 
-serve(
-	(req) => {
+const template = await Deno.readTextFile('./src/index.html');
+
+await serve(
+	async (req) => {
 		const url = new URL(req.url);
 
 		if (url.pathname.startsWith('/open-journalism/')) {
-			console.log(fromFileUrl(import.meta.resolve('./')));
-			return serveDir(req, {
-				fsRoot: fromFileUrl(import.meta.resolve('./')),
-				urlRoot: 'open-journalism',
-			});
+			const { html, css: { code: css } } =
+				(await import('../build/server/Home.js')).default.render();
+
+			return new Response(
+				template
+					.replace('<!-- Svelte:CSS -->', `<style>${css}</style>`)
+					.replace('<!-- Svelte:HTML -->', html),
+				{
+					headers: { 'Content-Type': 'text/html' },
+				},
+			);
 		} else if (url.searchParams.get('test')) {
 			return Response.redirect(
 				new URL(`/open-journalism/wpt/viewer/${url.search}`, url.origin),

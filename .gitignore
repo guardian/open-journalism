@@ -4,4 +4,8 @@
 .env
 build
 dist
-.DS_Store 
+
+.DS_Store
+
+# Mononykus build this dynamically
+src/components/Island.svelte

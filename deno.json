@@ -1,5 +1,7 @@
 {
 	"tasks": {
+		"dev": "deno task serve & deno task build:dev",
+		"build:dev": "deno run --allow-net --allow-read --allow-write=. --allow-env --allow-run https://deno.land/x/mononykus@0.0.6/server/build.ts dev",
 		"score": "deno run -A src/bigquery_score/scripts/bundle.ts",
 		"serve": "deno run --allow-net --allow-read --watch src/dev_server.ts",
 		"maintain-readme": "deno run -A scripts/maintain_readme.js"
