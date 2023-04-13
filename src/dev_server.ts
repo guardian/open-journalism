@@ -13,8 +13,11 @@ await serve(
 		const url = new URL(req.url);
 
 		if (url.pathname.startsWith('/open-journalism/')) {
-			const { html, css: { code: css } } =
-				(await import('../build/server/Home.js')).default.render();
+			const file = url.pathname.replace('/open-journalism/', '');
+			const svelte_component = await import(
+				`./_site/build/routes/${file === '' ? 'index' : file}.js`
+			);
+			const { html, css: { code: css } } = svelte_component.default.render();
 
 			return new Response(
 				template
