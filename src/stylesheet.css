@@ -12,7 +12,7 @@ html {
 }
 
 body {
-	padding: 1rem;
+	padding: 0 1rem 1rem 1rem;
 	font-size: 1rem;
 	font-size: 1rem;
 	line-height: 1.5;
@@ -80,7 +80,16 @@ oj-header .config span, oj-header .page span {
 	background-image: url("/open-journalism/img/Moto-G4-trans-3.webp");
 	padding: 100px 15px 72px 12px;
 }
-
+.device.iphone {
+	background-image: url("/open-journalism/img/iPhoneX-2.webp");
+	padding: 65px 17px 59px 17px;
+}
+.device.default {
+	background-color: #333;
+    border-radius: 30px;
+    border: 1px solid #999999;
+    padding: 50px 12px 50px 12px;
+}
 h1 {
 	grid-row: title;
 	font-family: "GuardianTextEgyptian";
@@ -88,6 +97,9 @@ h1 {
 	font-size: 2.5rem;
 	line-height: 1.15;
 	padding-bottom: 2rem;
+}
+oj-header h1 {
+	padding-top: .75rem;
 }
 oj-header h1, oj-header nav {
 	padding-left: .5rem;
@@ -209,7 +221,7 @@ ul.legend {
 	column-gap: 1rem;
 	margin: 0 -0.25rem;
 	padding: 0.25rem;
-	top: 1rem;
+	top: 0;
 	position: sticky;
 	background-color: #1119;
 }
@@ -238,7 +250,6 @@ footer {
 	oj-header {
 		grid-template-columns:  1fr 1fr 1fr 1fr;
 		grid-template-rows: min-content min-content;
-		border-top: 1px solid #999999;
 		border-left: none;
 	}
 	h1 {
@@ -251,8 +262,9 @@ footer {
 		padding-left: 0;
 	}
 	oj-header nav {
+		padding-top: 1rem;
 		grid-column-start: 3;
-		grid-column-end: 4;
+		grid-column-end: 5;
 		grid-row: 1;
 	}
 	.config {
