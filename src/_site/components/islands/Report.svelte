@@ -1,195 +1,147 @@
 <script>
+	// @ts-check
+	// @ts-expect-error -- ESBuild has it
 	import { onMount } from "svelte/internal";
 	import { get_result } from "../../../wpt/lib/get_result.js";
+	import { get_image_src } from "../../../wpt/lib/get_image.js";
 	import {
 		get_web_vitals_score,
 		is_metric,
 	} from "../../../bigquery_score/score.js";
+	import Sankey from "./Sankey.svelte";
 
-	/** @type {string} */
-	let test;
+	/** @type {string | null} */
+	let test = null;
+
+	/** @type {(pair: [string, any]) => pair is ['cls' | 'fid' | 'fcp', number]} */
+	const is_valid = (pair) => is_metric(pair[0]) && typeof pair[1] === "number";
+
+	/** @param {number} score */
+	const score_to_label = (score) => {
+		if (score >= 90) return "good";
+		if (score >= 50) return "needs-improvement";
+		return "poor";
+	};
+
+	/** @param {string} from */
+	const get_device_type = (from) => {
+		if (from.includes("Motorola G (gen 4)")) return "moto-g4";
+		if (from.includes("iPhone")) return "iphone";
+		return "unknown";
+	};
 
 	onMount(() => {
-		test = "230404_BiDcA3_76M";
-		return;
-
-		const loading = document.createElement("p");
-		loading.innerText = `Loading report #${test} `;
-		const dots = setInterval(() => {
-			loading.innerText += ".";
-		}, 60);
-		document.body.appendChild(loading);
-
-		/** requests below this size will be grouped */
-		const threshold =
-			requests.reduce((total, { objectSize }) => total + objectSize, 0) / 360;
-
-		/** requests below this size will be discarded */
-		const discard = 100;
-
-		const { above, below, discarded } = requests.reduce(
-			(accumulator, request) => {
-				if (request.objectSize > threshold) accumulator.above.push(request);
-				else if (request.objectSize > discard) accumulator.below.push(request);
-				else accumulator.discarded.push(request);
-				return accumulator;
-			},
-			{
-				above: /** @type {Requests} */ ([]),
-				below: /** @type {Requests} */ ([]),
-				discarded: /** @type {Requests} */ ([]),
-			}
-		);
-
-		if (discarded.length > 1) {
-			console.warn(
-				`The following ${discarded.length} requests were discarded:`,
-				discarded
-			);
-		}
-
-		const filtered_requests = [
-			above,
-			below
-				.reduce((others, request) => {
-					const maybe_request = others.find(
-						({ request_type }) => request_type === request.request_type
-					);
-					if (maybe_request) {
-						maybe_request.objectSize += request.objectSize;
-						maybe_request.responseCode++;
-					} else {
-						others.push({
-							...request,
-							responseCode: 1,
-						});
-					}
-					return others;
-				}, /** @type {Requests} */ ([]))
-				.map((request) => ({
-					...request,
-					full_url: `… and ${request.responseCode} smaller requests`,
-				})),
-		].flat();
-
-		const { nodes, links } = get_nodes_and_links(
-			filtered_requests.map((request) => ({
-				...request,
-				request_type: request.full_url.includes("i.guim.co.uk")
-					? "Media"
-					: reduced_types(request.request_type),
-			}))
-		);
-
-		console.log({ nodes, links });
-
-		document.body.removeChild(loading);
-		clearInterval(dots);
-
-		const ojHeader = document.querySelector("oj-header");
-		const pageBlock = document.createElement("div");
-		pageBlock.className = "page";
-
-		const testLink = document.createElement("p");
-		testLink.innerHTML = ``;
-		pageBlock.appendChild(testLink);
-
-		const urlLink = document.createElement("p");
-		urlLink.innerHTML = `<span>Page URL:</span> <a href="${testUrl}">${testUrl}</a>`;
-		pageBlock.appendChild(urlLink);
-
-		const configBlock = document.createElement("div");
-		configBlock.className = "config";
-
-		const fromInfo = document.createElement("p");
-		fromInfo.innerHTML = from;
-		configBlock.appendChild(fromInfo);
-
-		ojHeader?.appendChild(configBlock);
-		ojHeader?.appendChild(pageBlock);
-
-		const overviewBlock = document.createElement("section");
-		overviewBlock.className = "overview";
-
-		const perf = document.createElement("table");
-		perf.className = "performance";
-
-		overviewBlock.appendChild(perf);
-		document.body.appendChild(overviewBlock);
-
-		const figure = document.createElement("figure");
-		figure.classList.add("device");
-		if (from.includes("Motorola G (gen 4)")) figure.classList.add("moto-g4");
-		if (from.includes("iPhone")) figure.classList.add("iphone");
-
-		const image_src = get_image_src(test);
-		if (image_src) {
-			const img = document.createElement("img");
-			img.width = 211; // Half-width of Moto G4
-			img.src = image_src;
-			figure.appendChild(img);
-			overviewBlock.appendChild(figure);
-		}
-
-		document.body.appendChild(legend());
-
-		const svg = chart({
-			nodes,
-			links,
-			padding,
-			height:
-				filtered_requests.reduce(
-					(total, { objectSize }) => total + objectSize,
-					0
-				) /
-					1200 +
-				filtered_requests.length * padding,
-		});
-		if (svg) {
-			document.body.appendChild(svg);
-		}
+		test = new URLSearchParams(window.location.search).get("test");
 	});
 </script>
 
 {#if test}
 	{#await get_result(test)}
-		Loading…
-	{:then { performance }}
+		Loading report…
+	{:then { performance, from, requests }}
 		<span>Test #:</span>
 		<a href="https://www.webpagetest.org/result/{test}/">{test}</a>
 
 		<table>
-			{#each Object.entries(performance).filter( ([key]) => is_metric(key) ) as [key, value]}
+			{#each Object.entries(performance).filter(is_valid) as [key, value]}
 				{@const score = Math.round(get_web_vitals_score(key, value))}
 				{@const formatted_value =
 					value > 1
 						? `${Intl.NumberFormat("en-GB").format(value / 1000)}s`
 						: `${Math.round(value * 100 * 10) / 10}%`}
-				<tr
-					class={score >= 90
-						? "good"
-						: score >= 50
-						? "needs-improvement"
-						: "poor"}
-				>
+				<tr>
 					<th>{key}</th>
-					<td>{score} – {formatted_value}</td>
+					<td class={score_to_label(score)}>{score} – {formatted_value}</td>
 				</tr>
 			{/each}
 		</table>
+
+		{@const device_type = get_device_type(from)}
+		<figure class={device_type}>
+			{#if device_type === "moto-g4"}
+				<img
+					class="device"
+					src="/open-journalism/Moto-G4-trans-3.webp"
+					alt=""
+				/>
+			{:else if device_type === "iphone"}
+				<!-- add something-->
+			{:else}
+				<!-- add something-->
+			{/if}
+			<img
+				class="screenshot"
+				src={get_image_src(test)}
+				alt="Screenshot of page"
+				width={211}
+			/>
+		</figure>
+
+		<Sankey {requests} />
 	{/await}
+{:else}
+	{@const example_tests = /** @type {const} */ ([
+		"230117_BiDcKE_8T2",
+		"230324_AiDcQ1_9EZ",
+		"230329_AiDcTT_8MB",
+	])}
+	<p>No test id provided, ensure it’s present in the url, for example:</p>
+	<ul>
+		{#each example_tests as test}
+			<li><a href="?test={test}">?test={test}</a></li>
+		{/each}
+	</ul>
 {/if}
 
 <style>
-	tr.good {
-		color: lightgreen;
+	table {
+		list-style: none;
+		font-family: "GuardianTextSans";
+		font-size: small;
+		border-spacing: 0 1rem;
 	}
 
-	tr.needs-improvement {
-		color: orange;
+	table th {
+		text-align: left;
+		text-transform: uppercase;
+		border-left: 1px solid #999999;
+		padding-left: 0.5rem;
+		vertical-align: top;
 	}
 
-	tr.poor {
-		color: red;
+	table td {
+		padding-left: 0.5rem;
+		font-size: 3rem;
+		line-height: 1;
+		padding-bottom: 1rem;
+	}
+
+	table td.good {
+		color: #10c8a7;
+	}
+
+	table td.needs-improvement {
+		color: #e38800;
+	}
+
+	table td.poor {
+		color: #ff3d00;
+	}
+
+	figure {
+		position: relative;
+		width: min-content;
+	}
+	figure.moto-g4 .screenshot {
+		margin: 100px 15px 72px 12px;
+	}
+
+	figure.moto-g4 .device {
+		width: 238px;
+	}
+
+	figure .device {
+		position: absolute;
+		inset: 0;
 	}
 </style>

@@ -73,23 +73,6 @@ oj-header .config span, oj-header .page span {
 	align-items: flex-start;
 	gap: 1.5rem;
 }
-.device {
-	background-size: cover;
-}
-.device.moto-g4 {
-	background-image: url("/open-journalism/img/Moto-G4-trans-3.webp");
-	padding: 100px 15px 72px 12px;
-}
-.device.iphone {
-	background-image: url("/open-journalism/img/iPhoneX-2.webp");
-	padding: 65px 17px 59px 17px;
-}
-.device.default {
-	background-color: #333;
-    border-radius: 30px;
-    border: 1px solid #999999;
-    padding: 50px 12px 50px 12px;
-}
 h1 {
 	grid-row: title;
 	font-family: "GuardianTextEgyptian";
@@ -159,40 +142,6 @@ h2 b {
 	font-size: medium;
 }
 
-.performance {
-	list-style: none;
-	font-family: "GuardianTextSans";
-	font-size: small;
-	border-spacing: 0 1rem;
-}
-
-.performance th {
-	text-align: left;
-	text-transform: uppercase;
-	border-left: 1px solid #999999;
-	padding-left: .5rem;
-	vertical-align: top;
-}
-
-.performance td {
-	padding-left: .5rem;
-	font-size: 3rem;
-	line-height: 1;
-	padding-bottom: 1rem;
-}
-
-.performance td.good {
-	color: #10C8A7;
-}
-
-.performance td.needs-improvement {
-	color: #E38800;
-}
-
-.performance td.poor {
-	color: #FF3D00;
-}
-
 .right {
 	text-align: right;
 }
@@ -215,22 +164,6 @@ svg text {
 	.performance td {
 		font-size: 5rem;
 	}
-}
-ul.legend {
-	display: flex;
-	column-gap: 1rem;
-	margin: 0 -0.25rem;
-	padding: 0.25rem;
-	top: 0;
-	position: sticky;
-	background-color: #1119;
-}
-
-ul.legend li::marker {
-	content: "■ ";
-	width: 24px;
-	height: 24px;
-	color: var(--colour, #333);
 }
 
 footer {

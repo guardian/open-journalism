@@ -1,9 +1,8 @@
 {
 	"tasks": {
-		"dev": "deno task serve & deno task build:dev",
-		"build:dev": "deno run --allow-net --allow-read --allow-write=. --allow-env --allow-run https://deno.land/x/mononykus@0.1.1/src/build.ts dev",
+		"dev": "deno task serve & deno run -A https://deno.land/x/mononykus@0.1.1/src/build.ts dev",
+		"build": "deno task build:svelte && deno run --allow-net --allow-read=src/_site --allow-write=src/_site/build src/_site/routes.js",
 		"build:svelte": "deno run --allow-net --allow-read --allow-write=. --allow-env --allow-run https://deno.land/x/mononykus@0.1.1/src/build.ts",
-		"build:pages": "deno task build:svelte && deno run --allow-read --allow-write src/_site/routes.js",
 		"score": "deno run -A src/bigquery_score/scripts/bundle.ts",
 		"serve": "deno run --allow-net --allow-read --watch src/dev_server.ts",
 		"maintain-readme": "deno run -A scripts/maintain_readme.js"
