@@ -1,10 +1,10 @@
 {
 	"tasks": {
 		"score": "deno run -A src/bigquery_score/scripts/bundle.ts",
-		"serve": "deno task lume -s",
+		"dev": "deno task lume -s --config src/_site/_config.ts",
 		"maintain-readme": "deno run -A scripts/maintain_readme.js",
 		"lume": "echo \"import 'lume/cli.ts'\" | deno run --unstable -A -",
-		"build": "deno task lume"
+		"build": "deno task lume --config src/_site/_config.ts"
 	},
 	"compilerOptions": {
 		"lib": ["dom", "dom.iterable", "deno.ns"],
