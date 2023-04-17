@@ -155,12 +155,12 @@ if (test) {
 	const figure = document.createElement('figure');
 	figure.classList.add('device');
 
-	if (from.includes('Motorola G (gen 4)')) {
-		figure.classList.add('moto-g4');
+	if (from.includes('Motorola G (gen 4)'))  {
+		figure.classList.add('moto-g4')
 	} else if (from.includes('iPhone')) {
-		figure.classList.add('iphone');
+		figure.classList.add('iphone')
 	} else {
-		figure.classList.add('default');
+		figure.classList.add('default')
 	}
 
 	const image_src = get_image_src(test);
