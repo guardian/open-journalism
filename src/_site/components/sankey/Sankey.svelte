@@ -3,7 +3,7 @@
 
 	// @ts-check
 
-	/** @typedef {import("./sankey").Requests} Requests */
+	/** @typedef {import("./sankey.js").Requests} Requests */
 
 	/** @type {Requests}*/
 	export let requests;

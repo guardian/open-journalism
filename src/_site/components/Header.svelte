@@ -1,10 +1,13 @@
 <script>
-	import { pages } from "../routes";
+	const pages = /** @type {const} */ ({
+		"/index.html": "Home",
+		"/wpt.html": "Guardian × WebPageTest",
+	});
 
 	/** @param {string} [route] */
 	const getPath = (route = "/") => `/open-journalism${route}`;
 
-	/** @type {string} */
+	/** @type {keyof typeof pages} */
 	export let current_route;
 	const current_path = getPath(current_route);
 </script>

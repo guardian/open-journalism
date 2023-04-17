@@ -2,13 +2,13 @@
 	// @ts-check
 	// @ts-expect-error -- ESBuild has it
 	import { onMount } from "svelte/internal";
-	import { get_result } from "../../../wpt/lib/get_result.js";
-	import { get_image_src } from "../../../wpt/lib/get_image.js";
+	import { get_result } from "../../wpt/lib/get_result.js";
+	import { get_image_src } from "../../wpt/lib/get_image.js";
 	import {
 		get_web_vitals_score,
 		is_metric,
-	} from "../../../bigquery_score/score.js";
-	import Sankey from "./Sankey.svelte";
+	} from "../../bigquery_score/score.js";
+	import Sankey from "./sankey/Sankey.svelte";
 
 	/** @type {string | null} */
 	let test = null;

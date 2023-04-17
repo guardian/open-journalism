@@ -3,7 +3,7 @@
 	import Footer from "../components/Footer.svelte";
 </script>
 
-<Header current_route="/" />
+<Header current_route="/index.html" />
 
 <h2>Current focus: improving web page performance</h2>
 

@@ -4,9 +4,7 @@
 	import Island from "../build/Island.svelte";
 </script>
 
-<Header current_route="/wpt" />
-
-<h2>Placeholder</h2>
+<Header current_route="/wpt.html" />
 
 <Island name="Report" />
 

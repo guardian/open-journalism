@@ -1,10 +1,8 @@
 {
 	"tasks": {
-		"dev": "deno task serve & deno run -A https://deno.land/x/mononykus@0.1.1/src/build.ts dev",
-		"build": "deno task build:svelte && deno run --allow-net --allow-read=src/_site --allow-write=src/_site/build src/_site/routes.js",
-		"build:svelte": "deno run --allow-net --allow-read --allow-write=. --allow-env --allow-run https://deno.land/x/mononykus@0.1.1/src/build.ts",
+		"dev": "deno run -A https://deno.land/x/mononykus@0.2.3/src/build.ts --site=src/_site/ --dev --base=open-journalism # ./src/_site/islands.js",
+		"build": "deno run --allow-net --allow-read --allow-write=. --allow-env --allow-run https://deno.land/x/mononykus@0.2.3/src/build.ts --site=src/_site/ --base=open-journalism # ./src/_site/islands.js",
 		"score": "deno run -A src/bigquery_score/scripts/bundle.ts",
-		"serve": "deno run --allow-net --allow-read --watch src/dev_server.ts",
 		"maintain-readme": "deno run -A scripts/maintain_readme.js"
 	},
 	"compilerOptions": {
