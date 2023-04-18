@@ -100,10 +100,11 @@
 <style>
 	ul.legend {
 		display: flex;
-		column-gap: 2rem;
-		margin: 0 -0.25rem;
+		column-gap: 1rem;
+		margin: 0;
 		padding: 0.25rem;
 		top: 1rem;
+		list-style-type: none;
 	}
 
 	:global(svg text) {

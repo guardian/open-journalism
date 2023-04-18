@@ -9,7 +9,9 @@ const metrics =
 		ttfb: { p10: 800, median: 1800 },
 	});
 
-/** @type {(metric: string) => metric is keyof typeof metrics} */
+/** @typedef {keyof typeof metrics} Metric */
+
+/** @type {(metric: string) => metric is Metric} */
 export const is_metric = (metric) => metric in metrics;
 
 /** This will run in JS inside BigQuery, so we need to handle errors
@@ -24,7 +26,7 @@ export const is_metric = (metric) => metric in metrics;
  * """
  * ```
  *
- * @param {keyof typeof metrics} metric
+ * @param {Metric} metric
  * @param {number} value
  */
 export const get_web_vitals_score = (metric, value) =>

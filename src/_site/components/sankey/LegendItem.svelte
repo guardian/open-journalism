@@ -7,6 +7,7 @@
 </script>
 
 <li style={`--colour: ${colour({ id, value: 0 })}`}>
+	<span>■</span>
 	{#if id === "Script/https://assets.guim.co.uk/"}
 		1st party
 	{:else if id === "Script/https://www.google.com/"}
@@ -17,8 +18,7 @@
 </li>
 
 <style>
-	li::marker {
-		content: "■ ";
+	li span {
 		color: var(--colour, #333);
 	}
 </style>

@@ -11,10 +11,12 @@
 	import Sankey from "./sankey/Sankey.svelte";
 	import Row from "./Row.svelte";
 
+	/** @typedef {import("../../bigquery_score/score.js").Metric} Metric */
+
 	/** @type {string | undefined} */
 	let test = undefined;
 
-	/** @type {(pair: [string, any]) => pair is ['cls' | 'fid' | 'fcp', number]} */
+	/** @type {(pair: [string, any]) => pair is [Metric, number]} */
 	const is_valid = (pair) => is_metric(pair[0]) && typeof pair[1] === "number";
 
 	/** @param {number} score */
@@ -31,6 +33,24 @@
 		return "unknown";
 	};
 
+	/** @param {Metric} core_web_vital */
+	const full_name = (core_web_vital) => {
+		switch (core_web_vital) {
+			case "cls":
+				return "Cumulative layout shift";
+			case "fid":
+				return "First input delay";
+			case "lcp":
+				return "Largest contentful paint";
+			case "fcp":
+				return "First contentful paint";
+			case "ttfb":
+				return "Time to first byte";
+			default:
+				return "Unknown metric";
+		}
+	};
+
 	onMount(() => {
 		test = new URLSearchParams(window.location.search).get("test");
 	});
@@ -41,11 +61,20 @@
 		Loading report…
 	{:then { performance, from, requests, testUrl }}
 		{@const device_type = get_device_type(from)}
+		{@const [location, , , device, speed] = from.split("-")}
 
 		<Row>
-			<h3 slot="title">
-				{@html from}
-			</h3>
+			<ul slot="title" class="info">
+				<li>
+					Location: {location}
+				</li>
+				<li>
+					Device: {@html device}
+				</li>
+				<li>
+					Speed: {@html speed}
+				</li>
+			</ul>
 			<ul slot="info" class="flex">
 				<li>
 					<span>Test #:</span>
@@ -79,7 +108,7 @@
 							? `${Intl.NumberFormat("en-GB").format(value / 1000)}s`
 							: `${Math.round(value * 100 * 10) / 10}%`}
 					<tr>
-						<th>{key}</th>
+						<th>{full_name(key)} ({key})</th>
 						<td class={score_to_label(score)}>{score} – {formatted_value}</td>
 					</tr>
 				{/each}
@@ -132,6 +161,10 @@
 	}
 	ul.flex li a {
 		word-break: break-word;
+	}
+
+	.info {
+		list-style-type: none;
 	}
 
 	#web-vitals {
