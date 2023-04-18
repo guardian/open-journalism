@@ -9,6 +9,7 @@
 		is_metric,
 	} from "../../bigquery_score/score.js";
 	import Sankey from "./sankey/Sankey.svelte";
+	import Row from "./Row.svelte";
 
 	/** @type {string | undefined} */
 	let test = undefined;
@@ -38,44 +39,72 @@
 {#if test}
 	{#await get_result(test)}
 		Loading report…
-	{:then { performance, from, requests }}
-		<span>Test #:</span>
-		<a href="https://www.webpagetest.org/result/{test}/">{test}</a>
-
-		<table>
-			{#each Object.entries(performance).filter(is_valid) as [key, value]}
-				{@const score = Math.round(get_web_vitals_score(key, value))}
-				{@const formatted_value =
-					value > 1
-						? `${Intl.NumberFormat("en-GB").format(value / 1000)}s`
-						: `${Math.round(value * 100 * 10) / 10}%`}
-				<tr>
-					<th>{key}</th>
-					<td class={score_to_label(score)}>{score} – {formatted_value}</td>
-				</tr>
-			{/each}
-		</table>
-
+	{:then { performance, from, requests, testUrl }}
 		{@const device_type = get_device_type(from)}
-		<figure class={device_type}>
-			{#if device_type === "moto-g4"}
+
+		<Row>
+			<h3 slot="title">
+				{@html from}
+			</h3>
+			<ul slot="info" class="flex">
+				<li>
+					<span>Test #:</span>
+					<a href="https://www.webpagetest.org/result/{test}/">{test}</a>
+				</li>
+				<li>
+					<span>Page URL:</span>
+					<a href={testUrl}>{testUrl}</a>
+				</li>
+			</ul>
+		</Row>
+
+		<Row>
+			<h3 slot="title">Web Vitals</h3>
+			<ul slot="info" class="flex legend">
+				<li><span class="good">■</span>Good (score >= 90)</li>
+				<li>
+					<span class="needs-improvement">■</span>Needs improvement (90 > score
+					>= 50)
+				</li>
+				<li><span class="poor">■</span>Poor (50 > score)</li>
+			</ul>
+		</Row>
+
+		<div id="web-vitals">
+			<table>
+				{#each Object.entries(performance).filter(is_valid) as [key, value]}
+					{@const score = Math.round(get_web_vitals_score(key, value))}
+					{@const formatted_value =
+						value > 1
+							? `${Intl.NumberFormat("en-GB").format(value / 1000)}s`
+							: `${Math.round(value * 100 * 10) / 10}%`}
+					<tr>
+						<th>{key}</th>
+						<td class={score_to_label(score)}>{score} – {formatted_value}</td>
+					</tr>
+				{/each}
+			</table>
+
+			<figure class={device_type}>
+				{#if device_type === "moto-g4"}
+					<img
+						class="device"
+						src="/open-journalism/Moto-G4-trans-3.webp"
+						alt=""
+					/>
+				{:else if device_type === "iphone"}
+					<img class="device" src="/open-journalism/iPhoneX-2.webp" alt="" />
+				{:else}
+					<!-- add something-->
+				{/if}
 				<img
-					class="device"
-					src="/open-journalism/Moto-G4-trans-3.webp"
-					alt=""
+					class="screenshot"
+					src={get_image_src(test)}
+					alt="Screenshot of page"
+					width={211}
 				/>
-			{:else if device_type === "iphone"}
-				<img class="device" src="/open-journalism/iPhoneX-2.webp" alt="" />
-			{:else}
-				<!-- add something-->
-			{/if}
-			<img
-				class="screenshot"
-				src={get_image_src(test)}
-				alt="Screenshot of page"
-				width={211}
-			/>
-		</figure>
+			</figure>
+		</div>
 
 		<Sankey {requests} />
 	{/await}
@@ -94,11 +123,31 @@
 {/if}
 
 <style>
+	ul.flex {
+		list-style-type: none;
+	}
+	ul.flex li span {
+		display: inline-block;
+		width: 80px;
+	}
+	ul.flex li a {
+		word-break: break-word;
+	}
+
+	#web-vitals {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: space-between;
+		max-width: 960px;
+		padding: 1rem;
+	}
+
 	table {
 		list-style: none;
 		font-family: "GuardianTextSans";
 		font-size: small;
 		border-spacing: 0 1rem;
+		height: min-content;
 	}
 
 	table th {
@@ -116,15 +165,15 @@
 		padding-bottom: 1rem;
 	}
 
-	table td.good {
+	.good {
 		color: #10c8a7;
 	}
 
-	table td.needs-improvement {
+	.needs-improvement {
 		color: #e38800;
 	}
 
-	table td.poor {
+	.poor {
 		color: #ff3d00;
 	}
 
@@ -136,7 +185,7 @@
 		margin: 100px 15px 72px 12px;
 	}
 
-	figure.moto-g4 .screenshot {
+	figure.iphone .screenshot {
 		margin: 65px 17px 59px 17px;
 	}
 

@@ -1,5 +1,7 @@
 <script>
 	// @ts-check
+	import LegendItem from "./LegendItem.svelte";
+	import Row from "../Row.svelte";
 	import { chart, get_nodes_and_links, colour } from "./sankey.js";
 
 	/** @typedef {import("./sankey.js").Requests} Requests */
@@ -70,26 +72,30 @@
 	const height = padding * filtered_requests.length + totalSize / 1200;
 </script>
 
-<ul class="legend">
-	{#each ["Script", "Script/https://assets.guim.co.uk/", "Script/https://www.google.com/", "Everything else", "Document", "Media", "Font", "Other"] as id}
-		<li style={`--colour: ${colour({ id, value: 0 })}`}>
-			{#if id === "Script/https://assets.guim.co.uk/"}
-				1st party
-			{:else if id === "Script/https://www.google.com/"}
-				3rd party
-			{:else}
-				{id}
-			{/if}
-		</li>
-	{/each}
-</ul>
+<Row>
+	<h3 slot="title">Page Breakdown</h3>
+	<div slot="info" class="legend">
+		<ul class="legend">
+			{#each ["Script", "Script/https://assets.guim.co.uk/", "Script/https://www.google.com/"] as id}
+				<LegendItem {id} />
+			{/each}
+		</ul>
+		<ul class="legend">
+			{#each ["Everything else", "Document", "Media", "Font", "Other"] as id}
+				<LegendItem {id} />
+			{/each}
+		</ul>
+	</div>
+</Row>
 
-{@html chart({
-	nodes,
-	links,
-	padding,
-	height,
-}).outerHTML}
+<figure class="sankey">
+	{@html chart({
+		nodes,
+		links,
+		padding,
+		height,
+	}).outerHTML}
+</figure>
 
 <style>
 	ul.legend {
@@ -98,13 +104,6 @@
 		margin: 0 -0.25rem;
 		padding: 0.25rem;
 		top: 1rem;
-		position: sticky;
-		background-color: #1119;
-	}
-
-	ul.legend li::marker {
-		content: "■ ";
-		color: var(--colour, #333);
 	}
 
 	:global(svg text) {
