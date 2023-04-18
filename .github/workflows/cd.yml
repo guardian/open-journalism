@@ -18,6 +18,9 @@ concurrency:
   group: "pages"
   cancel-in-progress: false
 
+env:
+  DENO_DIR: ./cache
+
 jobs:
   deploy:
     environment:
