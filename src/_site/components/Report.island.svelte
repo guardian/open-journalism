@@ -144,4 +144,22 @@
 		position: absolute;
 		inset: 0;
 	}
+
+	/** There’s some issue with nested CSS currently */
+	:global(ul.legend) {
+		display: flex;
+		column-gap: 1rem;
+		margin: 0 -0.25rem;
+		padding: 0.25rem;
+		top: 1rem;
+		position: sticky;
+		background-color: #1119;
+	}
+
+	:global(ul.legend li::marker) {
+		content: "■ ";
+		width: 24px;
+		height: 24px;
+		color: var(--colour, #333);
+	}
 </style>

@@ -1,0 +1,184 @@
+
+oj-header {
+	display: grid;
+	grid-template-columns: 1fr;
+	grid-template-rows: [title] auto [nav] auto [config] auto [page] auto;
+	border-left: 1px solid #999999;
+}
+oj-header, .overview {
+	margin-bottom: 2rem;
+}
+.config {
+	grid-column: 1;
+	grid-row: config;
+}
+.page {
+	grid-column: 1;
+	grid-row: page;
+}
+.page a {
+	word-break: break-word;
+}
+.config, .page  {
+	padding-top: .5rem;
+	padding-bottom: 1rem;
+	padding-left: .5rem;
+	max-width: 100%;
+}
+oj-header .config span, oj-header .page span {
+	width: 80px;
+    display: inline-block;
+}
+.config, .page {
+	border-top: 1px solid #999999;
+}
+.overview {
+	display: flex;
+	flex-direction: column-reverse;
+	align-items: flex-start;
+	gap: 1.5rem;
+}
+
+h1 {
+	grid-row: title;
+	font-family: "GuardianTextEgyptian";
+	font-weight: 500;
+	font-size: 2.5rem;
+	line-height: 1.15;
+	padding-bottom: 2rem;
+}
+oj-header h1, oj-header nav {
+	padding-left: .5rem;
+}
+oj-header h1 a {
+	color: inherit;
+	text-underline-offset: 0.75rem;
+	text-decoration: none;
+}
+
+oj-header h1 a:hover {
+	color: var(--link-color);
+}
+oj-header nav {
+	grid-row: nav;
+	padding: .5rem;
+	padding-bottom: 1rem;
+}
+oj-header nav ul {
+	display: flex;
+	gap: .5rem;
+	list-style: none;
+}
+
+oj-header nav li + li:before {
+	content: " / ";
+	opacity: 0.3;
+}
+
+h2 {
+	font-family: "GuardianTextEgyptian";
+	font-weight: 500;
+	font-size: 1rem;
+	line-height: 1.15;
+	line-height: 1.15;
+}
+
+ul {
+	list-style-position: inside;
+	list-style-type: "- ";
+}
+
+h2 {
+	/* padding-bottom: 3px; */
+	position: relative;
+	/* opacity: 0.5; */
+}
+
+h2 b {
+	font-weight: normal;
+}
+
+.test-url {
+	font-family: "GuardianTextSans";
+	font-size: large;
+	padding-top: .5rem;;
+	font-size: medium;
+}
+
+.right {
+	text-align: right;
+}
+
+tbody tr:nth-of-type(odd) {
+	background-color: rgba(255, 255, 255, 0.12);
+}
+
+svg {
+	margin-left: -10px;
+}
+
+svg text {
+	fill: CanvasText;
+	font-family: "GuardianTextSans";
+}
+
+@media only screen and (min-width: 960px) {
+
+	.performance td {
+		font-size: 5rem;
+	}
+}
+
+footer {
+	max-width: 36rem;
+	border-top: 2px solid rgba(0,0,0, 0.25);
+	padding: 1rem 0;
+	margin: 1rem 0;
+}
+
+@media only screen and (min-width: 740px) {
+	.overview {
+		flex-direction: row;
+		gap: 4rem;
+	}
+}
+@media only screen and (min-width: 960px) {
+	oj-header {
+		grid-template-columns:  1fr 1fr 1fr 1fr;
+		grid-template-rows: min-content min-content;
+		border-top: 1px solid #999999;
+		border-left: none;
+	}
+	h1 {
+		padding-left: 0;
+	}
+	oj-header h1 {
+		grid-column-start: 1;
+		grid-column-end: 3;
+		grid-row: 1;
+		padding-left: 0;
+	}
+	oj-header nav {
+		grid-column-start: 3;
+		grid-column-end: 4;
+		grid-row: 1;
+	}
+	.config {
+		grid-column-start: 1;
+		grid-column-end: 1;
+		grid-row: 2;
+		padding-left: 0;
+		padding-right: .5rem;
+	}
+	.page {
+		grid-column-start: 2;
+		grid-column-end: 5;
+		grid-row: 2;
+		padding-right: .5rem;
+	}
+	/* .config,  */
+	nav, .page {
+		border-left: 1px solid #999999;
+		/* border-top: none; */
+	}
+}

@@ -1,7 +1,6 @@
 <script>
-	import { chart, get_nodes_and_links, colour } from "./sankey.js";
-
 	// @ts-check
+	import { chart, get_nodes_and_links, colour } from "./sankey.js";
 
 	/** @typedef {import("./sankey.js").Requests} Requests */
 
