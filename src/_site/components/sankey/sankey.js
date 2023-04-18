@@ -15,6 +15,69 @@ import {
 /** @typedef {import('https://esm.sh/d3-sankey@0.12.3').SankeyGraph<Node, Link>} SankeyGraph */
 /** @typedef {Link["source"] | Link["target"]} MaybeNode */
 
+/** @typedef {import('../../../wpt/lib/get_result.parser.js').Request[]} Requests */
+
+/** @type {(type: import('../../../wpt/lib/get_result.parser.js').Request["request_type"]) => "Script" | "Document" | "Font" | "Media" | "Other"} */
+export const reduced_types = (type) => {
+	switch (type) {
+		case 'Script':
+		case 'Font':
+		case 'Document':
+			return type;
+
+		case 'Media':
+		case 'Image':
+			return 'Media';
+
+		case 'Stylesheet':
+		case 'Fetch':
+		case 'XHR':
+		case 'Preflight':
+		case 'Other':
+		default:
+			return 'Other';
+	}
+};
+
+/** @type {(requests: Requests) => { nodes: Node[], links: Link[]}} */
+export const get_nodes_and_links = (requests) => {
+	const script = { id: 'Script', value: 0 };
+	const other = { id: 'Everything else', value: 0 };
+	/** @type {Node[]} */
+	const trunk = requests.reduce(
+		(types, { request_type, objectSize }) => {
+			if (request_type === 'Preflight') return types;
+
+			const type = request_type === 'Script' ? script : other;
+
+			type.value += objectSize;
+
+			return types;
+		},
+		[script, other],
+	);
+
+	/** @type {Node[]} */
+	const leaves = requests.map(({ request_type, full_url, objectSize }) => {
+		const id = [request_type, full_url].join('/');
+		const value = objectSize;
+
+		return { id, value };
+	});
+
+	const nodes = trunk.concat(leaves);
+	const links = leaves.map(({ id, value }) => ({
+		source: id.split('/')[0] === 'Script' ? script.id : other.id,
+		target: id,
+		value,
+	}));
+
+	return {
+		nodes,
+		links,
+	};
+};
+
 const colour_mappings = /** @type {const} */ ({
 	js: '#10C8A7',
 	'js-1st': '#AE10C8',
@@ -27,7 +90,7 @@ const colour_mappings = /** @type {const} */ ({
 });
 
 /** @param {MaybeNode} node */
-const colour = (node) => colour_mappings[nodeGroup(node)];
+export const colour = (node) => colour_mappings[nodeGroup(node)];
 
 const nodeGroups = Object.keys(colour_mappings);
 /** @type {(a: keyof typeof colour_mappings, b: keyof typeof colour_mappings) => number} */
@@ -108,45 +171,6 @@ const sankey_layout =
 			return group_difference === 0 ? b.value - a.value : group_difference;
 		});
 
-export const legend = () => {
-	const ul = document.createElement('ul');
-	ul.classList.add('legend');
-
-	for (
-		const id of [
-			'Script',
-			'Script/https://assets.guim.co.uk/',
-			'Script/https://www.google.com/',
-			'Everything else',
-			'Document',
-			'Media',
-			'Font',
-			'Other',
-		]
-	) {
-		const li = document.createElement('li');
-		li.style.setProperty('--colour', colour({ id, value: 0 }));
-		switch (id) {
-			case 'Script/https://assets.guim.co.uk/': {
-				li.innerText = '1st party';
-				break;
-			}
-			case 'Script/https://www.google.com/': {
-				li.innerText = '3rd party';
-				break;
-			}
-			default: {
-				li.innerText = id;
-				break;
-			}
-		}
-
-		ul.appendChild(li);
-	}
-
-	return ul;
-};
-
 /** @type {(ops: {nodes: Node[], links: Link[], height: number, padding: number}) => SVGSVGElement | null}} */
 export const chart = ({ nodes, links, height, padding }) => {
 	sankey_layout
@@ -154,7 +178,8 @@ export const chart = ({ nodes, links, height, padding }) => {
 		.extent([
 			[marginLeft, marginTop],
 			[width - marginRight, height - marginBottom],
-		]).nodeId(({ index = -1 }) => nodes[index]?.id ?? 'not found')({
+		])
+		.nodeId(({ index = -1 }) => nodes[index]?.id ?? 'not found')({
 			nodes,
 			links,
 		});
@@ -170,21 +195,25 @@ export const chart = ({ nodes, links, height, padding }) => {
 
 	const defs = svg.append('defs');
 
-	defs.append('linearGradient')
+	defs
+		.append('linearGradient')
 		.attr('id', 'gradient')
 		.call((gradient) =>
 			gradient
 				.append('stop')
 				.attr('offset', `96%`)
 				.attr('stop-color', 'white')
-		).call((gradient) =>
+		)
+		.call((gradient) =>
 			gradient
 				.append('stop')
 				.attr('offset', '100%')
 				.attr('stop-color', 'black')
 		);
 
-	defs.append('mask').attr('id', 'mask')
+	defs
+		.append('mask')
+		.attr('id', 'mask')
 		.append('rect')
 		.attr('width', width)
 		.attr('height', height)
@@ -256,9 +285,11 @@ export const chart = ({ nodes, links, height, padding }) => {
 		.attr('stroke', ({ index: i }) => `url(#${uid}-link-${i})`)
 		.attr('stroke-width', ({ width = 0 }) => Math.max(1, width))
 		.call((path) =>
-			path.append('title').text(({ source, target }) =>
-				`${as_node(source)?.id} → ${as_node(target)?.id}`
-			)
+			path
+				.append('title')
+				.text(({ source, target }) =>
+					`${as_node(source)?.id} → ${as_node(target)?.id}`
+				)
 		);
 
 	return svg.node();
