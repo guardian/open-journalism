@@ -65,7 +65,7 @@
 					alt=""
 				/>
 			{:else if device_type === "iphone"}
-				<!-- add something-->
+				<img class="device" src="/open-journalism/iPhoneX-2.webp" alt="" />
 			{:else}
 				<!-- add something-->
 			{/if}
@@ -134,6 +134,10 @@
 	}
 	figure.moto-g4 .screenshot {
 		margin: 100px 15px 72px 12px;
+	}
+
+	figure.moto-g4 .screenshot {
+		margin: 65px 17px 59px 17px;
 	}
 
 	figure.moto-g4 .device {
