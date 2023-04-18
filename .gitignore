@@ -5,7 +5,12 @@
 build
 dist
 
+# OS generated files #
+######################
 .DS_Store
-
-# Mononykus build this dynamically
-src/components/Island.svelte
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
