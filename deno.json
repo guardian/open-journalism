@@ -1,8 +1,8 @@
 {
 	"tasks": {
 		"score": "deno run -A src/bigquery_score/scripts/bundle.ts",
-		"build": "deno run --allow-net --allow-read --allow-write=. --allow-env --allow-run https://deno.land/x/mononykus@0.2.3/src/build.ts --site=src/_site/ --base=open-journalism # ./src/_site/islands.js",
-		"dev": "deno run -A https://deno.land/x/mononykus@0.2.3/src/build.ts --site=src/_site/ --dev --base=open-journalism # ./src/_site/islands.js",
+		"build": "deno run --allow-net --allow-read --allow-write=. --allow-env --allow-run https://deno.land/x/mononykus@0.2.6/src/build.ts --site=src/_site/ --base=open-journalism # ./src/_site/islands.js",
+		"dev": "deno run -A https://deno.land/x/mononykus@0.2.6/src/build.ts --site=src/_site/ --dev --base=open-journalism # ./src/_site/islands.js",
 		"maintain-readme": "deno run -A scripts/maintain_readme.js"
 	},
 	"compilerOptions": {
