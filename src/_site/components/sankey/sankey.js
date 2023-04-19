@@ -39,6 +39,22 @@ export const reduced_types = (type) => {
 	}
 };
 
+const { format } = Intl.NumberFormat('en-GB', { maximumSignificantDigits: 3 });
+
+/** @param {string[]} parts */
+const serialise = (...parts) => parts.join('|');
+/** @param {string} parts */
+const deserialise = (parts) => {
+	const [type, url] = parts.split('|');
+	if (!type) throw new Error('Missing type');
+	if (!url) return /** @type {const} */ ([type]);
+	try {
+		return /** @type {const} */ ([type, new URL(url)]);
+	} catch (_) {
+		return /** @type {const} */ ([type, url]);
+	}
+};
+
 /** @type {(requests: Requests) => { nodes: Node[], links: Link[]}} */
 export const get_nodes_and_links = (requests) => {
 	const script = { id: 'Script', value: 0 };
@@ -59,7 +75,7 @@ export const get_nodes_and_links = (requests) => {
 
 	/** @type {Node[]} */
 	const leaves = requests.map(({ request_type, full_url, objectSize }) => {
-		const id = [request_type, full_url].join('/');
+		const id = serialise(request_type, full_url);
 		const value = objectSize;
 
 		return { id, value };
@@ -67,19 +83,19 @@ export const get_nodes_and_links = (requests) => {
 
 	/** @type {Node[]} */
 	const budget = [
-		{ id: 'Script/budget', value: 350_000 },
-		{ id: 'Everything else/budget', value: 150_000 },
+		{ id: serialise('Script', 'budget'), value: 350_000 },
+		{ id: serialise('Everything else', 'budget'), value: 150_000 },
 	];
 
 	const nodes = trunk.concat(leaves).concat(budget);
 	const links = leaves.map(({ id, value }) => ({
-		source: id.split('/')[0] === 'Script' ? script.id : other.id,
+		source: deserialise(id)[0] === 'Script' ? script.id : other.id,
 		target: id,
 		value,
 	})).concat(
 		budget.map(({ id, value }) => ({
 			source: id,
-			target: id.split('/')[0] ?? 'missing',
+			target: deserialise(id)[0] ?? 'missing',
 			value,
 		})),
 	);
@@ -112,17 +128,17 @@ const compareGroup = (a, b) => nodeGroups.indexOf(a) - nodeGroups.indexOf(b);
 const nodeGroup = (node) => {
 	if (typeof node !== 'object') return 'other';
 
-	const [type, , , domain] = node.id.split('/');
+	const [type, url] = deserialise(node.id);
 
 	switch (type) {
 		case 'Script':
-			return domain
+			return url instanceof URL
 				? [
 						'assets.guim.co.uk',
 						'interactive.guim.co.uk',
 						'contributions.guardianapis.com',
 						'sourcepoint.theguardian.com',
-					].includes(domain)
+					].includes(url.hostname)
 					? 'js-1st'
 					: 'js-3rd'
 				: 'js';
@@ -151,11 +167,17 @@ const nodeGroup = (node) => {
 
 /** @param {Node} node */
 const nodeLabel = ({ id, value }) => {
-	const path = id.split('/').filter(Boolean).at(-1);
+	const [type, path] = deserialise(id);
 
-	return `${path} (${
-		Intl.NumberFormat('en-GB').format(Math.ceil(value / 1000))
-	} kB)`;
+	const name = path instanceof URL
+		? `<tspan fill="${colour({ id, value })}">` + path.hostname +
+			'/…</tspan>/' +
+			path.pathname.split('/').at(-1)
+		: path
+		? path
+		: type;
+
+	return `${name} (${format(value / 1000)} kB)`;
 };
 
 const marginLeft = 12;
@@ -243,7 +265,10 @@ export const chart = ({ nodes, links, height, padding }) => {
 		.attr('width', ({ x1 = 0, x0 = 0 }) => x1 - x0)
 		.attr('fill', colour);
 
-	node.append('title').text(({ id, value }) => `${id} – ${value}`);
+	node.append('title').text(({ id, value }) => {
+		const [type, path] = deserialise(id);
+		return `${type} (${format(value)} B)${path ? ' – ' + path.toString() : ''}`;
+	});
 
 	// The node labels
 	svg
@@ -257,7 +282,7 @@ export const chart = ({ nodes, links, height, padding }) => {
 		.attr('y', ({ y1 = 0, y0 = 0 }) => (y1 + y0) / 2)
 		.attr('dy', '0.35em')
 		.attr('text-anchor', 'start')
-		.text(nodeLabel)
+		.html(nodeLabel)
 		.attr('mask', 'url(#mask)');
 
 	/** @type {(node: Link["target"]) => Node | undefined} */
@@ -299,9 +324,7 @@ export const chart = ({ nodes, links, height, padding }) => {
 		.call((path) =>
 			path
 				.append('title')
-				.text(({ source, target }) =>
-					`${as_node(source)?.id} → ${as_node(target)?.id}`
-				)
+				.text(({ value }) => format(value / 1000) + ' kB')
 		);
 
 	return svg.node();
