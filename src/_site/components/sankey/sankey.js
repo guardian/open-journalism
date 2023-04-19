@@ -42,9 +42,9 @@ export const reduced_types = (type) => {
 const { format } = Intl.NumberFormat('en-GB', { maximumSignificantDigits: 3 });
 
 /** @param {string[]} parts */
-const serialise = (...parts) => parts.join('|');
+export const serialise = (...parts) => parts.join('|');
 /** @param {string} parts */
-const deserialise = (parts) => {
+export const deserialise = (parts) => {
 	const [type, url] = parts.split('|');
 	if (!type) throw new Error('Missing type');
 	if (!url) return /** @type {const} */ ([type]);

@@ -1,8 +1,8 @@
 <script>
 	// @ts-check
-	import LegendItem from "./LegendItem.svelte";
+	import Definition from "./Definition.svelte";
 	import Row from "../Row.svelte";
-	import { chart, get_nodes_and_links, colour } from "./sankey.js";
+	import { chart, get_nodes_and_links, colour, serialise } from "./sankey.js";
 
 	/** @typedef {import("./sankey.js").Requests} Requests */
 
@@ -77,16 +77,17 @@
 <Row>
 	<h3 slot="title">Page Breakdown</h3>
 	<div slot="info" class="legend">
-		<ul class="legend">
-			{#each ["Script", "Script/https://assets.guim.co.uk/", "Script/https://www.google.com/"] as id}
-				<LegendItem {id} />
+		<h4>Key:</h4>
+		<dl>
+			{#each ["Script", serialise("Script", "https://assets.guim.co.uk/"), serialise("Script", "https://www.google.com/")] as id}
+				<Definition {id} />
 			{/each}
-		</ul>
-		<ul class="legend">
+		</dl>
+		<dl>
 			{#each ["Everything else", "Document", "Media", "Font", "Other"] as id}
-				<LegendItem {id} />
+				<Definition {id} />
 			{/each}
-		</ul>
+		</dl>
 	</div>
 </Row>
 
@@ -118,13 +119,14 @@
 </label>
 
 <style>
-	ul.legend {
-		display: flex;
-		column-gap: 1rem;
-		margin: 0;
-		padding: 0.25rem;
-		top: 1rem;
-		list-style-type: none;
+	.legend {
+		display: grid;
+		grid-template-columns: auto 1fr;
+		gap: 0.5rem 1rem;
+	}
+
+	.legend h4 {
+		grid-row-end: span 2;
 	}
 
 	.totals {
@@ -132,6 +134,14 @@
 		list-style-type: none;
 		padding: 1rem;
 		gap: 2rem;
+	}
+
+	h3 {
+		font-family: "GuardianTextEgyptian";
+		font-weight: 500;
+		font-size: 1.75rem;
+		line-height: 115%;
+		padding-bottom: 0;
 	}
 
 	:global(svg text) {
