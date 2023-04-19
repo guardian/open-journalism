@@ -90,6 +90,19 @@
 	</div>
 </Row>
 
+<ul class="totals">
+	<li>
+		Budget<br />
+		<strong>500 kB</strong>
+	</li>
+	<li>
+		Page results<br />
+		<strong>
+			{Math.ceil(totalSize / 1000)} kB
+		</strong>
+	</li>
+</ul>
+
 <figure class="sankey">
 	{@html chart({
 		nodes,
@@ -112,6 +125,13 @@
 		padding: 0.25rem;
 		top: 1rem;
 		list-style-type: none;
+	}
+
+	.totals {
+		display: flex;
+		list-style-type: none;
+		padding: 1rem;
+		gap: 2rem;
 	}
 
 	:global(svg text) {

@@ -65,12 +65,25 @@ export const get_nodes_and_links = (requests) => {
 		return { id, value };
 	});
 
-	const nodes = trunk.concat(leaves);
+	/** @type {Node[]} */
+	const budget = [
+		{ id: 'Script/budget', value: 350_000 },
+		{ id: 'Everything else/budget', value: 150_000 },
+	];
+
+	const nodes = trunk.concat(leaves).concat(budget);
 	const links = leaves.map(({ id, value }) => ({
 		source: id.split('/')[0] === 'Script' ? script.id : other.id,
 		target: id,
 		value,
-	}));
+	})).concat([
+		{ source: 'Script/budget', target: 'Script', value: 350_000 },
+		{
+			source: 'Everything else/budget',
+			target: 'Everything else',
+			value: 350_000,
+		},
+	]);
 
 	return {
 		nodes,
