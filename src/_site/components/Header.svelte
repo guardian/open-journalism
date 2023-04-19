@@ -9,8 +9,8 @@
 	const getPath = (route = "/") => `/open-journalism${route}`;
 
 	/** @type {keyof typeof pages} */
-	export let current_route;
-	const current_path = getPath(current_route);
+	export let route;
+	const current_path = getPath("/" + route + ".html");
 </script>
 
 <header>
@@ -42,6 +42,6 @@
 	ul {
 		list-style-type: none;
 		padding: 0.5rem 1rem;
-		border-left: 1px solid #999;
+		border-left: var(--border);
 	}
 </style>

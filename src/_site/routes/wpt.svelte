@@ -1,11 +1,8 @@
 <script>
-	import Header from "../components/Header.svelte";
-	import Footer from "../components/Footer.svelte";
+	import Page from "../components/Page.svelte";
 	import Island from "../build/Island.svelte";
 </script>
 
-<Header current_route="/wpt.html" />
-
-<Island name="Report" />
-
-<Footer />
+<Page route="wpt">
+	<Island name="Report" />
+</Page>
