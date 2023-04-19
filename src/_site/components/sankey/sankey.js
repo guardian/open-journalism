@@ -76,14 +76,13 @@ export const get_nodes_and_links = (requests) => {
 		source: id.split('/')[0] === 'Script' ? script.id : other.id,
 		target: id,
 		value,
-	})).concat([
-		{ source: 'Script/budget', target: 'Script', value: 350_000 },
-		{
-			source: 'Everything else/budget',
-			target: 'Everything else',
-			value: 350_000,
-		},
-	]);
+	})).concat(
+		budget.map(({ id, value }) => ({
+			source: id,
+			target: id.split('/')[0] ?? 'missing',
+			value,
+		})),
+	);
 
 	return {
 		nodes,
