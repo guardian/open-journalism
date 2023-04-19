@@ -9,7 +9,6 @@
 		is_metric,
 	} from "../../bigquery_score/score.js";
 	import Sankey from "./sankey/Sankey.svelte";
-	import Row from "./Row.svelte";
 
 	/** @typedef {import("../../bigquery_score/score.js").Metric} Metric */
 
@@ -63,55 +62,71 @@
 		{@const device_type = get_device_type(from)}
 		{@const [location, , , device, speed] = from.split("-")}
 
-		<Row>
-			<ul slot="title" class="info">
-				<li>
-					Location: {location}
-				</li>
-				<li>
-					Device: {@html device}
-				</li>
-				<li>
-					Speed: {@html speed}
-				</li>
-			</ul>
-			<ul slot="info" class="flex">
-				<li>
-					<span>Test #:</span>
-					<a href="https://www.webpagetest.org/result/{test}/">{test}</a>
-				</li>
-				<li>
-					<span>Page URL:</span>
-					<a href={testUrl}>{testUrl}</a>
-				</li>
-			</ul>
-		</Row>
+		<div id="report-meta">
+			<table id="test-settings">
+				<tr>
+					<th>Region</th>
+					<td>{location}</td>
+				</tr>
+				<tr>
+					<th>Device</th>
+					<td>{@html device}</td>
+				</tr>
+				<tr>
+					<th>Connection</th>
+					<td>{@html speed}</td>
+				</tr>
+			</table>
 
-		<Row>
-			<h3 slot="title">Web Vitals</h3>
-			<ul slot="info" class="flex legend">
-				<li><span class="good">■</span>Good (score >= 90)</li>
-				<li>
-					<span class="needs-improvement">■</span>Needs improvement (90 > score
-					>= 50)
-				</li>
-				<li><span class="poor">■</span>Poor (50 > score)</li>
-			</ul>
-		</Row>
+			<table id="result-meta">
+				<tr>
+					<th>Test #</th>
+					<td>
+						<a href="https://www.webpagetest.org/result/{test}/">{test}</a>
+					</td>
+				</tr>
+				<tr>
+					<th>URL</th>
+					<td><a href={testUrl}>{testUrl}</a></td>
+				</tr>
+			</table>
+
+			<h3 id="cwv-header">Core Web Vitals</h3>
+			<div id="cwv-legend">
+				<h4>Key</h4>
+				<dl>
+					<dt class="good">■</dt>
+					<dd>90 to 100 (Good)</dd>
+					<dt class="needs-improvement">■</dt>
+					<dd>50 to 89 (Fair)</dd>
+					<dt class="poor">■</dt>
+					<dd>0 to 49 (Poor)</dd>
+				</dl>
+			</div>
+		</div>
 
 		<div id="web-vitals">
 			<table>
-				{#each Object.entries(performance).filter(is_valid) as [key, value]}
-					{@const score = Math.round(get_web_vitals_score(key, value))}
-					{@const formatted_value =
-						value > 1
-							? `${Intl.NumberFormat("en-GB").format(value / 1000)}s`
-							: `${Math.round(value * 100 * 10) / 10}%`}
+				<thead>
 					<tr>
-						<th>{full_name(key)} ({key})</th>
-						<td class={score_to_label(score)}>{score} – {formatted_value}</td>
+						<th colspan="2">WPT score</th>
+						<th>Out of 100</th>
 					</tr>
-				{/each}
+				</thead>
+				<tbody>
+					{#each Object.entries(performance).filter(is_valid) as [key, value]}
+						{@const score = Math.round(get_web_vitals_score(key, value))}
+						{@const formatted_value =
+							key === "cls"
+								? Math.round(value * 1000) / 1000
+								: `${Intl.NumberFormat("en-GB").format(value / 1000)}s`}
+						<tr class={score_to_label(score)}>
+							<th>{full_name(key)} ({key})</th>
+							<td class="formatted-value">{formatted_value}</td>
+							<td class="score">({score})</td>
+						</tr>
+					{/each}
+				</tbody>
 			</table>
 
 			<figure class={device_type}>
@@ -152,50 +167,149 @@
 {/if}
 
 <style>
-	ul.flex {
-		list-style-type: none;
-	}
-	ul.flex li span {
-		display: inline-block;
-		width: 80px;
-	}
-	ul.flex li a {
-		word-break: break-word;
-	}
-
-	.info {
-		list-style-type: none;
+	#report-meta {
+		display: grid;
+		grid-template-columns: 1fr 3fr;
+		grid-template-areas:
+			"test-settings result-meta"
+			"cwv-header cwv-legend";
+		align-items: start;
+		--padding: 0.5rem;
 	}
 
-	#web-vitals {
+	#report-meta > * {
+		border-top: 1px solid var(--border-color);
+		padding: var(--padding) 0 var(--padding);
+	}
+
+	#report-meta > *:nth-child(odd) {
+		border-right: 1px solid var(--border-color);
+		padding-right: var(--padding);
+	}
+	#report-meta > *:nth-child(even) {
+		padding-left: var(--padding);
+	}
+
+	#test-settings {
+		grid-area: test-settings;
+	}
+	#result-meta {
+		grid-area: result-meta;
+	}
+	#cwv-header {
+		grid-area: cwv-header;
+		font-family: "GuardianTextEgyptian";
+		font-weight: 500;
+		font-size: 1.75rem;
+		line-height: 115%;
+		padding-bottom: 0;
+	}
+	#cwv-legend {
+		grid-area: cwv-legend;
+	}
+
+	#cwv-legend {
+		align-items: center;
 		display: flex;
-		flex-wrap: wrap;
-		justify-content: space-between;
-		max-width: 960px;
-		padding: 1rem;
 	}
 
-	table {
-		list-style: none;
-		font-family: "GuardianTextSans";
-		font-size: small;
-		border-spacing: 0 1rem;
-		height: min-content;
+	#cwv-legend :is(dl, dt, dd) {
+		display: inline;
 	}
 
-	table th {
+	#cwv-legend :is(dt) {
+		padding-right: 0.5ch;
+	}
+	#cwv-legend :is(dd) {
+		padding-right: 1ch;
+	}
+
+	#report-meta th {
 		text-align: left;
-		text-transform: uppercase;
-		border-left: 1px solid #999999;
-		padding-left: 0.5rem;
+		white-space: nowrap;
+		vertical-align: top;
+		font-weight: inherit;
+	}
+
+	#report-meta td {
+		word-wrap: break-word;
 		vertical-align: top;
 	}
 
-	table td {
+	#report-meta :global(b) {
+		font-weight: inherit;
+	}
+
+	#report-meta th:after,
+	#cwv-legend h4:after {
+		content: ":";
+		padding-right: 1ch;
+	}
+
+	#test-settings th {
+		width: 50%;
+	}
+
+	#cwv-legend h4 {
+		display: inline;
+	}
+
+	#web-vitals {
+		display: grid;
+		grid-template-columns: 2fr 1fr;
+		padding: 1rem 0;
+		gap: 2rem;
+	}
+
+	#web-vitals table {
+		list-style: none;
+		font-family: "GuardianTextSans";
+		font-size: small;
+		border-spacing: 0 2rem;
+		height: min-content;
+	}
+
+	#web-vitals thead th {
+		font-family: "GuardianTextEgyptian";
+		font-weight: 500;
+		font-size: 1.75rem;
+		line-height: 115%;
+		text-align: left;
+	}
+
+	#web-vitals tbody tr *:not(:last-child) {
+		padding-right: 3rem;
+	}
+
+	#web-vitals tbody th {
+		font-size: 1rem;
+		font-weight: 700;
+		line-height: 135%;
+		text-align: left;
+		border-left: 1px solid var(--border-color);
 		padding-left: 0.5rem;
-		font-size: 3rem;
-		line-height: 1;
-		padding-bottom: 1rem;
+		vertical-align: top;
+		width: 120px;
+		color: var(--text-color);
+	}
+
+	#web-vitals td {
+		vertical-align: baseline;
+	}
+
+	#web-vitals td.formatted-value {
+		font-family: "GuardianTextSans";
+		font-style: normal;
+		font-weight: 700;
+		font-size: 100px;
+		line-height: 0.8;
+	}
+
+	#web-vitals td.score {
+		font-family: "GuardianTextSans";
+		font-style: normal;
+		font-weight: 400;
+		font-size: 60px;
 	}
 
 	.good {
