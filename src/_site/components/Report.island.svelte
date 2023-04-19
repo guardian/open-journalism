@@ -178,12 +178,12 @@
 	}
 
 	#report-meta > * {
-		border-top: 1px solid var(--border-color);
+		border-top: var(--border);
 		padding: var(--padding) 0 var(--padding);
 	}
 
 	#report-meta > *:nth-child(odd) {
-		border-right: 1px solid var(--border-color);
+		border-right: var(--border);
 		padding-right: var(--padding);
 	}
 	#report-meta > *:nth-child(even) {
@@ -286,7 +286,7 @@
 		font-weight: 700;
 		line-height: 135%;
 		text-align: left;
-		border-left: 1px solid var(--border-color);
+		border-left: var(--border);
 		padding-left: 0.5rem;
 		vertical-align: top;
 		width: 120px;
