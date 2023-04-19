@@ -40,8 +40,18 @@
 	}
 
 	ul {
+		display: block;
 		list-style-type: none;
 		padding: 0.5rem 1rem;
 		border-left: var(--border);
+	}
+
+	li {
+		display: inline;
+	}
+
+	li + li:before {
+		content: " / ";
+		opacity: 0.3;
 	}
 </style>
