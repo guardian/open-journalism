@@ -21,7 +21,7 @@ const request = z.object({
 		'Stylesheet',
 		'XHR',
 		'Preflight',
-	]).optional(),
+	]).default('Other'),
 	objectSize: z.number(),
 });
 
