@@ -57,7 +57,26 @@
 
 {#if test}
 	{#await get_result(test)}
-		Loading report…
+		<div class="loading">
+			<p>Loading report…</p>
+
+			<svg
+				class="hourglass"
+				viewBox="0 0 30 48"
+				width={120}
+				stroke="white"
+				fill="none"
+				stroke-width="0.25"
+			>
+				<path
+					d="M2,4
+		c0,20 12,10 12,20 s-12,0 -12,20
+		h26
+		c0,-20 -12,-10 -12,-20 s12,0 12,-20
+		Z"
+				/>
+			</svg>
+		</div>
 	{:then { performance, from, requests, testUrl }}
 		{@const device_type = get_device_type(from)}
 		{@const [location, , , device, speed] = from.split("-")}
@@ -343,5 +362,25 @@
 	figure .device {
 		position: absolute;
 		inset: 0;
+	}
+
+	.loading {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+
+	.hourglass {
+		animation: rotation 1.2s ease infinite;
+	}
+
+	@keyframes rotation {
+		0% {
+			transform: rotate(0deg);
+		}
+		36%,
+		100% {
+			transform: rotate(180deg);
+		}
 	}
 </style>
