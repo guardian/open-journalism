@@ -69,7 +69,9 @@
 		0
 	);
 
-	const height = padding * filtered_requests.length + totalSize / 1200;
+	let scale = 1200;
+
+	$: height = padding * filtered_requests.length + totalSize / scale;
 </script>
 
 <Row>
@@ -96,6 +98,11 @@
 		height,
 	}).outerHTML}
 </figure>
+
+<label>
+	Vertical scale
+	<input type="range" bind:value={scale} min={600} max={12000} />
+</label>
 
 <style>
 	ul.legend {
