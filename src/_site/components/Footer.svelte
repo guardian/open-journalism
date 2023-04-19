@@ -1,16 +1,27 @@
 <footer>
-	<p>🍊 Guardian tools for an open journalism.</p>
-	<p>
-		<a href="https://github.com/guardian/open-journalism/">
-			View repo on Github
-		</a>
-	</p>
+	<p>Guardian tools for a more open journalism.</p>
+	<nav>
+		<ul>
+			<li><a href="https://github.com/guardian/open-journalism/">GitHub</a></li>
+		</ul>
+	</nav>
 </footer>
 
 <style>
 	footer {
-		border-top: 2px solid #999;
-		padding: 1rem 0;
-		margin: 1rem 0;
+		border-top: var(--border);
+		padding-top: 0.5rem;
+		margin-top: 1rem;
+		font-size: 12px;
+		display: flex;
+		justify-content: space-between;
 	}
+	li {
+		display: inline-block;
+	}
+
+	/* li + li:before {
+		content: " / ";
+		opacity: 0.3;
+	} */
 </style>
