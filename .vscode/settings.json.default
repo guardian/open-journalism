@@ -1,11 +1,21 @@
 {
+	"[css]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"[html]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
 	"cSpell.words": [
 		"deno",
 		"webpagetest"
 	],
 	"deno.enable": true,
 	"deno.lint": true,
+	"editor.codeActionsOnSave": {
+		"source.fixAll": true
+	},
 	"editor.defaultFormatter": "denoland.vscode-deno",
+	"editor.formatOnSave": true,
 	"files.associations": {
 		".vscode/settings.json*": "jsonc",
 		"tsconfig*.json": "jsonc"
