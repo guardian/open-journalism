@@ -37,21 +37,36 @@
 		display: grid;
 		grid-template-columns: 1fr 1fr;
 		gap: 1rem;
+		border-bottom: var(--border);
+	}
+
+	h1 {
+		border-right: var(--border);
+		padding-top: 0.5rem;
+		padding-bottom: 1.5rem;
+	}
+
+	h1 a {
+		text-decoration: none;
 	}
 
 	ul {
 		display: block;
 		list-style-type: none;
-		padding: 0.5rem 1rem;
-		border-left: var(--border);
+		padding: 0.5rem 0;
 	}
 
 	li {
 		display: inline;
+		font-weight: bold;
 	}
 
 	li + li:before {
 		content: " / ";
 		opacity: 0.3;
+	}
+
+	a {
+		font-weight: normal;
 	}
 </style>

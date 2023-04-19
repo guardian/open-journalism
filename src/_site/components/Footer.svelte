@@ -14,7 +14,10 @@
 		margin-top: 1rem;
 		font-size: 12px;
 		display: flex;
-		justify-content: space-between;
+		justify-content: flex-start;
+	}
+	nav {
+		padding-left: 0.5ch;
 	}
 	li {
 		display: inline-block;

@@ -177,16 +177,46 @@
 		"230324_AiDcQ1_9EZ",
 		"230329_AiDcTT_8MB",
 	])}
-	<p>No test id provided, ensure it’s present in the url, for example:</p>
-	<ul>
-		{#each example_tests as test}
-			<li><a href="?test={test}">?test={test}</a></li>
-		{/each}
-	</ul>
+	<div class="no-test-id">
+		<p>No test id provided. Ensure one is present in the url, for example:</p>
+		<ul>
+			{#each example_tests as test}
+				<li><a href="?test={test}">?test={test}</a></li>
+			{/each}
+		</ul>
+	</div>
 {/if}
 
 <style>
+	.no-test-id,
+	.loading {
+		display: flex;
+		width: 100%;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		height: 100%;
+	}
+
+	.no-test-id p {
+		padding-bottom: 1rem;
+	}
+
+	.no-test-id li {
+		display: inline-block;
+		font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas,
+			Liberation Mono, monospace;
+		font-size: 12px;
+	}
+
+	.no-test-id li + li:before {
+		content: "/";
+		padding: 0 0.5rem;
+		opacity: 0.3;
+	}
+
 	#report-meta {
+		margin-top: -1px;
 		display: grid;
 		grid-template-columns: 1fr 3fr;
 		grid-template-areas:

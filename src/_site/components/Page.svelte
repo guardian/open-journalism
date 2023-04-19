@@ -23,6 +23,7 @@
 		margin: 0;
 		padding: 0;
 	}
+
 	:global(html) {
 		height: 100%;
 		font-family: "GuardianTextSans", system-ui, -apple-system,
@@ -31,6 +32,22 @@
 		font-variant-numeric: tabular-nums;
 		color-scheme: only dark;
 		background-color: #111;
+	}
+
+	:global(body) {
+		min-height: 100%;
+		display: grid;
+		grid-template-rows: auto 1fr auto;
+		grid-template-areas:
+			"header"
+			"main"
+			"footer";
+		padding: 0 1rem 1rem 1rem;
+		font-size: 1rem;
+		line-height: 1.5;
+		color: var(--text-color);
+		font-weight: 400;
+		overflow-y: scroll;
 	}
 
 	:global(h1, h2, h3) {
@@ -59,21 +76,6 @@
 	}
 	:global(a:hover) {
 		text-decoration: underline;
-	}
-
-	:global(body) {
-		min-height: 100%;
-		display: grid;
-		grid-template-rows: auto 1fr auto;
-		grid-template-areas:
-			"header"
-			"main"
-			"footer";
-		padding: 0 1rem 1rem 1rem;
-		font-size: 1rem;
-		line-height: 1.5;
-		color: var(--text-color);
-		font-weight: 400;
 	}
 
 	:global(main) {
