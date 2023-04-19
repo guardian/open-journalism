@@ -45,7 +45,17 @@ export const get_result = async (test) => {
 			...request,
 			request_type,
 		});
-	});
+	}).reduce((deduplicated_requests, next_request) => {
+		const found = deduplicated_requests.find(({ full_url }) =>
+			full_url === next_request.full_url
+		);
+		if (found) {
+			found.objectSize += next_request.objectSize;
+		} else {
+			deduplicated_requests.push(next_request);
+		}
+		return deduplicated_requests;
+	}, /** @type {typeof raw_requests} */ ([]));
 
 	return {
 		from,
