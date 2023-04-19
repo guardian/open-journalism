@@ -79,9 +79,9 @@ export const get_nodes_and_links = (requests) => {
 };
 
 const colour_mappings = /** @type {const} */ ({
-	js: '#10C8A7',
 	'js-1st': '#AE10C8',
 	'js-3rd': '#00DAF8',
+	js: '#10C8A7',
 	image: '#E38800',
 	html: '#FF3D00',
 	font: '#FF0099',
