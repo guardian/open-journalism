@@ -59,7 +59,6 @@
 	{#await get_result(test)}
 		<div class="loading">
 			<p>Loading report…</p>
-
 			<svg
 				class="hourglass"
 				viewBox="0 0 30 48"

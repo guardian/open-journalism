@@ -170,7 +170,7 @@ if (test) {
 		img.src = image_src;
 		figure.appendChild(img);
 		overviewBlock.appendChild(figure);
-	}
+	}deno task devicePixelRatio
 
 	document.body.appendChild(legend());
 
