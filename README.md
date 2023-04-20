@@ -18,8 +18,13 @@ deno task score
 ```
 
 ```sh
-# Local development of GH pages on http://localhost:4507/open-journalism/
-deno task serve
+# 
+deno task build
+```
+
+```sh
+# 
+deno task dev
 ```
 
 ```sh
