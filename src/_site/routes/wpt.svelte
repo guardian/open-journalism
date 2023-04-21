@@ -1,8 +1,8 @@
 <script>
 	import Page from "../components/Page.svelte";
-	import Island from "../build/Island.svelte";
+	import Report from "../components/Report.island.svelte";
 </script>
 
 <Page route="wpt">
-	<Island name="Report" />
+	<Report />
 </Page>
