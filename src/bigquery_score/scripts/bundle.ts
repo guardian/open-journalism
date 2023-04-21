@@ -12,12 +12,18 @@ const { code } = await bundle(src);
 await ensureFile(dist);
 await Deno.writeTextFile(
 	dist,
-	'// @ts-nocheck -- bundled output\n' +
+	[
+		'// @ts-nocheck -- bundle output : start -- //',
 		code
 			.replace(/\n\/\/# sourceMappingURL(.+)/, '')
-			.replace(/\nexport .+;\n/g, '') +
-		'\nif(!is_metric(metric)) return undefined;' +
-		'\nreturn get_web_vitals_score(metric, value);',
+			.replace(/export [\s\S]+;\n/, '')
+			.replaceAll('\n', '').replaceAll(/\s{2,}/g, ' '),
+		'// -- bundle output : end -- //',
+		'',
+		'// return the value',
+		'if(!is_metric(metric)) return undefined;',
+		'return get_web_vitals_score(metric, value);',
+	].join('\n'),
 );
 
 console.info('✅ Done!');
