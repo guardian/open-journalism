@@ -14,8 +14,8 @@
 					deserunt et temporibus incidunt alias debitis accusantium. Minima
 					dolorem rerum corporis deleniti unde.
 				</p>
-			</td></tr
-		>
+			</td>
+		</tr>
 	</table>
 </Page>
 
