@@ -3,12 +3,12 @@
  *
  * @see https://observablehq.com/@d3/sankey-diagram
  */
-import { create } from 'https://esm.sh/d3@7.8.2';
+import { create } from 'https://esm.sh/d3@7.8.2?pin=v116';
 import {
 	sankey,
 	sankeyLinkHorizontal,
 	sankeyRight,
-} from 'https://esm.sh/d3-sankey@0.12.3';
+} from 'https://esm.sh/d3-sankey@0.12.3?pin=v116';
 
 /** @typedef {import('https://esm.sh/d3-sankey@0.12.3').SankeyLink<{id: string, value: number}, {}>} Link */
 /** @typedef {import('https://esm.sh/d3-sankey@0.12.3').SankeyNode<{id: string, value: number}, {}>} Node */

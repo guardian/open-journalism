@@ -5,6 +5,12 @@
 	export let route;
 </script>
 
+<svelte:head>
+	<title>@guardian/open-journalism</title>
+	<link href="https://assets.guim.co.uk/static/frontend/fonts/font-faces.css" rel="stylesheet" />
+	<link rel="icon" href="/open-journalism/favicon.svg">
+</svelte:head>
+
 <body>
 	<Header {route} />
 	<main><slot /></main>
