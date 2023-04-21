@@ -18,12 +18,12 @@ deno task score
 ```
 
 ```sh
-# 
+# Builds the site (`src/_site`).
 deno task build
 ```
 
 ```sh
-# 
+# Runs a dev server for the site (`src/_site`).
 deno task dev
 ```
 
