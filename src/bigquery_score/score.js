@@ -1,4 +1,4 @@
-import { getLogNormalScore } from 'https://cdn.jsdelivr.net/gh/GoogleChrome/lighthouse@10.0.2/core/lib/statistics.js';
+import { getLogNormalScore } from 'https://cdn.jsdelivr.net/gh/GoogleChrome/lighthouse@10.1.0/core/lib/statistics.js';
 
 const metrics =
 	/** @type {const} @satisfies {Record<string, Parameters<typeof getLogNormalScore>[0]>} */ ({
