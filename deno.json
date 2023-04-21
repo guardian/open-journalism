@@ -13,7 +13,7 @@
 	},
 	"lint": {
 		"files": {
-			"exclude": ["build", "cache"]
+			"exclude": ["build", "src/_site/build", "cache"]
 		}
 	},
 	"fmt": {
@@ -22,7 +22,7 @@
 			"singleQuote": true
 		},
 		"files": {
-			"exclude": ["build", "cache"]
+			"exclude": ["build", "src/_site/build", "cache"]
 		}
 	}
 }
