@@ -30,4 +30,6 @@ export const is_metric = (metric) => metric in metrics;
  * @param {number} value
  */
 export const get_web_vitals_score = (metric, value) =>
-	getLogNormalScore(metrics[metric], value) * 100;
+	is_metric(metric) && typeof value === 'number'
+		? getLogNormalScore(metrics[metric], value) * 100
+		: undefined;
