@@ -1,6 +1,6 @@
 import { assertEquals } from 'https://deno.land/std@0.180.0/testing/asserts.ts';
 
-import { get_web_vitals_score, is_metric } from './score.js';
+import { get_web_vitals_score } from './score.js';
 
 Deno.test('FID', () => {
 	assertEquals(get_web_vitals_score('fid', 0), 100);
@@ -27,5 +27,14 @@ Deno.test('TTFB', () => {
 });
 
 Deno.test('Returns undefined for invalid metrics', () => {
-	assertEquals(is_metric('INCORRECT'), false);
+	// @ts-expect-error -- we’re checking usage outside TS
+	assertEquals(get_web_vitals_score('INCORRECT', 100), undefined);
+	// @ts-expect-error -- we’re checking usage outside TS
+	assertEquals(get_web_vitals_score('fid', undefined), undefined);
+	// @ts-expect-error -- we’re checking usage outside TS
+	assertEquals(get_web_vitals_score('ttfb', null), undefined);
+	// @ts-expect-error -- we’re checking usage outside TS
+	assertEquals(get_web_vitals_score('ttfb', 'null'), undefined);
+	// @ts-expect-error -- we’re checking usage outside TS
+	assertEquals(get_web_vitals_score('ttfb', ''), undefined);
 });

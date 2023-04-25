@@ -21,7 +21,6 @@ await Deno.writeTextFile(
 		'// -- bundle output : end -- //',
 		'',
 		'// return the value',
-		'if(!is_metric(metric)) return undefined;',
 		'return get_web_vitals_score(metric, value);',
 	].join('\n'),
 );
