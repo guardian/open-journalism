@@ -18,7 +18,7 @@ export const is_metric = (metric) => metric in metrics;
  *
  * @example
  * ```SQL
- * CREATE TEMP FUNCTION get_web_vitals_score(value NUMERIC, metric STRING)
+ * CREATE TEMP FUNCTION get_web_vitals_score(metric STRING, value FLOAT64)
  * RETURNS NUMERIC
  * LANGUAGE js
  * AS r"""
