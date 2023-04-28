@@ -1,4 +1,4 @@
-import { z } from 'https://deno.land/x/zod@v3.21.4/mod.ts';
+import { z } from 'https://esm.sh/v117/zod@3.20.2/es2022/zod.mjs';
 
 const asset_type = z.object({
 	color: z.tuple([z.number(), z.number(), z.number()]),

@@ -246,7 +246,8 @@
     "https://esm.sh/v116/delaunator@5.0.0/deno/delaunator.mjs": "24521c45b27e44071dab79136b791a77d89cd442eed47c53252393e3c187f584",
     "https://esm.sh/v116/internmap@1.0.1/deno/internmap.mjs": "6c0dd926555d0e7abb4a29f23bd1c4ca16c5fbabf8bd0e384ea9013dd31f495c",
     "https://esm.sh/v116/internmap@2.0.3/deno/internmap.mjs": "888a2d00b3b9aa13eec97d36764bbe859d4c00004015ac84e7625bab9889eb44",
-    "https://esm.sh/v116/robust-predicates@3.0.1/deno/robust-predicates.mjs": "2cb4b7d89ec1d2c5392e8b262fe031199f0988be55388447a7c31c680a6178a0"
+    "https://esm.sh/v116/robust-predicates@3.0.1/deno/robust-predicates.mjs": "2cb4b7d89ec1d2c5392e8b262fe031199f0988be55388447a7c31c680a6178a0",
+    "https://esm.sh/v117/zod@3.20.2/es2022/zod.mjs": "7888a1356e4a81083f7f55ab272458d5554a11455279f016b9b317e7a43a2b9f"
   },
   "npm": {
     "specifiers": {
