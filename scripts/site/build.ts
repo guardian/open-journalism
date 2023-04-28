@@ -2,6 +2,8 @@
  * Builds the site (`src/_site`).
  */
 
-import { cmd } from './cmd.ts';
+import { args } from './cmd.ts';
 
-await Deno.run({ cmd }).status();
+const cmd = new Deno.Command(Deno.execPath(), { args });
+
+await cmd.output();

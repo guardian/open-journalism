@@ -2,11 +2,13 @@
  * Runs a dev server for the site (`src/_site`).
  */
 
-import { cmd } from './cmd.ts';
+import { args } from './cmd.ts';
 
-await Deno.run({
-	cmd: [
-		...cmd,
+const cmd = new Deno.Command(Deno.execPath(), {
+	args: [
+		...args,
 		'--dev',
 	],
-}).status();
+});
+
+cmd.spawn();

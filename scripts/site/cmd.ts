@@ -1,5 +1,4 @@
-export const cmd = [
-	'deno',
+export const args = [
 	'run',
 	'--allow-net',
 	'--allow-read',
@@ -11,4 +10,4 @@ export const cmd = [
 	'src/_site/',
 	'--base',
 	'open-journalism',
-] as const;
+];
