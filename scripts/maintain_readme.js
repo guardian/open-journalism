@@ -46,4 +46,5 @@ const newReadme = readme.replace(
 );
 
 await Deno.writeTextFile('./README.md', newReadme);
-await Deno.run({ cmd: ['deno', 'fmt', 'README.md'] }).status();
+const fmt = new Deno.Command(Deno.execPath(), { args: ['fmt', 'README.md'] });
+await fmt.spawn();
