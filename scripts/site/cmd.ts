@@ -6,7 +6,7 @@ export const cmd = [
 	'--allow-write',
 	'--allow-env',
 	'--allow-run',
-	'https://deno.land/x/mononykus@0.3.5/src/build.ts',
+	'https://deno.land/x/mononykus@0.5.0/src/build.ts',
 	'--site',
 	'src/_site/',
 	'--base',
