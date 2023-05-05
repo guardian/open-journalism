@@ -1,0 +1,16 @@
+on:
+  pull_request_review:
+    types: [submitted]
+    
+jobs:
+  add_label:
+    if: github.event.review.state == 'approved'
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+
+      - name: add label
+        uses: actions-ecosystem/action-add-labels@v1
+        with:
+          labels: run_chromatic
