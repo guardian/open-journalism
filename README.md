@@ -18,18 +18,23 @@ deno task score
 ```
 
 ```sh
-# Local development of GH pages on http://localhost:4507/open-journalism/
-deno task serve
+# Builds the site (`src/_site`).
+deno task build
 ```
 
 ```sh
-# Run a semi-standardised webpage test against an article. If you pass a URL, it will use that instead.
-deno task wpt
+# Runs a dev server for the site (`src/_site`).
+deno task dev
 ```
 
 ```sh
 # keep the README up to date with the tasks in deno.json
 deno task maintain-readme
+```
+
+```sh
+# Run a semi-standardised webpage test against an article. If you pass a URL, it will use that instead.
+deno task wpt
 ```
 
 <!-- /tasks -->
