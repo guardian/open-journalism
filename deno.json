@@ -3,7 +3,8 @@
 		"score": "deno run -A src/bigquery_score/scripts/bundle.ts",
 		"build": "deno run --allow-net --allow-read --allow-write --allow-env --allow-run scripts/build.ts",
 		"dev": "deno run --allow-net --allow-read --allow-write --allow-env --allow-run scripts/dev-server.ts",
-		"maintain-readme": "deno run -A scripts/maintain_readme.js"
+		"maintain-readme": "deno run -A scripts/maintain_readme.js",
+		"wpt": "deno run -A src/wpt/run_tests.ts"
 	},
 	"compilerOptions": {
 		"lib": ["dom", "dom.iterable", "deno.ns"],

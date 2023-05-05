@@ -32,4 +32,9 @@ deno task dev
 deno task maintain-readme
 ```
 
+```sh
+# Run a semi-standardised webpage test against an article. If you pass a URL, it will use that instead.
+deno task wpt
+```
+
 <!-- /tasks -->
