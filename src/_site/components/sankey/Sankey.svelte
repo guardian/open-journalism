@@ -2,7 +2,7 @@
 	// @ts-check
 	import Definition from "./Definition.svelte";
 	import Row from "../Row.svelte";
-	import { chart, get_nodes_and_links, colour, serialise } from "./sankey.js";
+	import { chart, getNodesAndLinks, serialise } from "./sankey.js";
 
 	/** @typedef {import("./sankey.js").Requests} Requests */
 
@@ -62,7 +62,7 @@
 			})),
 	].flat();
 
-	const { nodes, links } = get_nodes_and_links(filtered_requests);
+	const { nodes, links } = getNodesAndLinks(filtered_requests);
 
 	const totalSize = filtered_requests.reduce(
 		(total, { objectSize }) => total + objectSize,
