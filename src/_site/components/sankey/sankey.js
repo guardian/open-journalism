@@ -18,7 +18,7 @@ import {
 /** @typedef {import('../../../wpt/lib/get_result.parser.js').Request[]} Requests */
 
 /** @type {(type: import('../../../wpt/lib/get_result.parser.js').Request["request_type"]) => "Script" | "Document" | "Font" | "Media" | "Other"} */
-export const reduced_types = (type) => {
+export const reducedTypes = (type) => {
 	switch (type) {
 		case 'Script':
 		case 'Font':
@@ -56,7 +56,7 @@ export const deserialise = (parts) => {
 };
 
 /** @type {(requests: Requests) => { nodes: Node[], links: Link[]}} */
-export const get_nodes_and_links = (requests) => {
+export const getNodesAndLinks = (requests) => {
 	const script = { id: 'Script', value: 0 };
 	const other = { id: 'Everything else', value: 0 };
 	/** @type {Node[]} */
@@ -106,7 +106,7 @@ export const get_nodes_and_links = (requests) => {
 	};
 };
 
-const colour_mappings = /** @type {const} */ ({
+const colourMappings = /** @type {const} */ ({
 	'js-1st': '#AE10C8',
 	'js-3rd': '#00DAF8',
 	js: '#10C8A7',
@@ -118,13 +118,13 @@ const colour_mappings = /** @type {const} */ ({
 });
 
 /** @param {MaybeNode} node */
-export const colour = (node) => colour_mappings[nodeGroup(node)];
+export const colour = (node) => colourMappings[nodeGroup(node)];
 
-const nodeGroups = Object.keys(colour_mappings);
-/** @type {(a: keyof typeof colour_mappings, b: keyof typeof colour_mappings) => number} */
+const nodeGroups = Object.keys(colourMappings);
+/** @type {(a: keyof typeof colourMappings, b: keyof typeof colourMappings) => number} */
 const compareGroup = (a, b) => nodeGroups.indexOf(a) - nodeGroups.indexOf(b);
 
-/** @type {(node: MaybeNode) => keyof typeof colour_mappings} */
+/** @type {(node: MaybeNode) => keyof typeof colourMappings} */
 const nodeGroup = (node) => {
 	if (typeof node !== 'object') return 'other';
 
@@ -187,27 +187,27 @@ const marginRight = 360;
 const marginBottom = 18;
 const nodeWidth = 24;
 
-const sankey_layout =
+const sankeyLayout =
 	/** @type {typeof sankey<SankeyGraph, Node, Link>} */ (sankey)()
 		.nodeAlign(sankeyRight)
 		.nodeWidth(nodeWidth)
 		.linkSort((a, b) => {
-			const group_difference = compareGroup(
+			const groupDifference = compareGroup(
 				nodeGroup(a.target),
 				nodeGroup(b.target),
 			);
 
-			return group_difference === 0 ? b.value - a.value : group_difference;
+			return groupDifference === 0 ? b.value - a.value : groupDifference;
 		})
 		.nodeSort((a, b) => {
-			const group_difference = compareGroup(nodeGroup(a), nodeGroup(b));
+			const groupDifference = compareGroup(nodeGroup(a), nodeGroup(b));
 
-			return group_difference === 0 ? b.value - a.value : group_difference;
+			return groupDifference === 0 ? b.value - a.value : groupDifference;
 		});
 
 /** @type {(ops: {nodes: Node[], links: Link[], height: number, padding: number}) => SVGSVGElement | null}} */
 export const chart = ({ nodes, links, height, padding }) => {
-	sankey_layout
+	sankeyLayout
 		.nodePadding(padding)
 		.extent([
 			[marginLeft, marginTop],
@@ -286,7 +286,7 @@ export const chart = ({ nodes, links, height, padding }) => {
 		.attr('mask', 'url(#mask)');
 
 	/** @type {(node: Link["target"]) => Node | undefined} */
-	const as_node = (node) => (typeof node === 'object' ? node : undefined);
+	const asNode = (node) => (typeof node === 'object' ? node : undefined);
 
 	const link = svg
 		.append('g')
@@ -301,8 +301,8 @@ export const chart = ({ nodes, links, height, padding }) => {
 		.append('linearGradient')
 		.attr('id', ({ index }) => `${uid}-link-${index}`)
 		.attr('gradientUnits', 'userSpaceOnUse')
-		.attr('x1', ({ source }) => as_node(source)?.x1 ?? -1)
-		.attr('x2', ({ target }) => as_node(target)?.x0 ?? -1)
+		.attr('x1', ({ source }) => asNode(source)?.x1 ?? -1)
+		.attr('x2', ({ target }) => asNode(target)?.x0 ?? -1)
 		.call((gradient) =>
 			gradient
 				.append('stop')

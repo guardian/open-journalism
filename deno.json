@@ -12,17 +12,17 @@
 		"checkJs": true
 	},
 	"lint": {
-		"files": {
-			"exclude": ["build", "src/_site/build", "cache"]
-		}
+		"rules": {
+			"include": ["camelcase"]
+		},
+		"exclude": ["build", "src/_site/build", "src/bigquery_score/build", "cache"]
 	},
 	"fmt": {
 		"options": {
 			"useTabs": true,
 			"singleQuote": true
 		},
-		"files": {
-			"exclude": ["build", "src/_site/build", "cache"]
-		}
+
+		"exclude": ["build", "src/_site/build", "cache"]
 	}
 }
