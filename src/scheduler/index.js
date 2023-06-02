@@ -14,5 +14,3 @@ setTimeout(() => {
 	// it should therefore run after the first and before the second task
 	scheduler.add(p0(250));
 }, 500);
-
-// scheduler.run();
