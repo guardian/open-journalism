@@ -1,4 +1,3 @@
-// * @typedef {Map<Priority, Array<function(): Promise<void>>>} Queue
 /**
  * Possible priorities for tasks.
  * @typedef {0|1|2} Priority
@@ -82,8 +81,8 @@ async function run() {
  * @param {Task["name"]} options.name
  * @param {Task["task"]} options.task
  */
-export const createTask = function ({ priority, name, task }) {
+export const create = function ({ priority, name, task }) {
 	return { name, task, priority };
 };
 
-export const scheduler = { add, run };
+export const scheduler = { add, create };

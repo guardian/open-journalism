@@ -1,7 +1,7 @@
-import { createTask } from '../scheduler.js';
+import { scheduler } from '../scheduler.js';
 
 export const p2 = (delay = 0) =>
-	createTask({
+	scheduler.create({
 		priority: 2,
 		name: 'p2',
 		task: (done, { pagePerfScore }) => {
