@@ -5,15 +5,15 @@ const pagePerfScore: PagePerfScore = 1;
 
 const queue: Queue = [[], [], []];
 
-let running = false;
+let isRunning = false;
 
-async function runTasks() {
-	running = true;
+async function executeTasks() {
+	isRunning = true;
 
 	for (const [priority, cohort] of queue.entries()) {
 		// if there are tasks in a higher priority cohort, run those first
 		if (queue.some((cohort, i) => i < priority && cohort.length > 0)) {
-			await runTasks();
+			await executeTasks();
 			break;
 		}
 
@@ -24,6 +24,7 @@ async function runTasks() {
 
 		// empty the queue before we start running the tasks
 		// so that tasks added while running will be picked up
+		// doesn't handle tasks failing
 		queue[priority] = [];
 
 		await Promise.all(
@@ -35,20 +36,21 @@ async function runTasks() {
 		);
 	}
 
-	running = false;
-
 	// run again in case tasks have been added while running
-	if (queue.some((cohort) => cohort.length > 0)) await runTasks();
+	if (queue.some((cohort) => cohort.length > 0)) await executeTasks();
+
+	isRunning = false;
 }
 
-export const createTask = function (
+export const createTask = (
 	task: Task['task'],
-	{ priority, name }: { priority: Task['priority']; name: Task['name'] },
-) {
-	return { name, task, priority };
-};
+	{ priority, name }: {
+		priority: Task['priority'];
+		name: Task['name'];
+	},
+) => ({ name, task, priority });
 
 export async function scheduleTask(task: Task) {
 	queue[task.priority].push(task);
-	if (!running) await runTasks();
+	if (!isRunning) await executeTasks();
 }
