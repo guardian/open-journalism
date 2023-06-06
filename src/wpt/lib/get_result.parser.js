@@ -1,6 +1,6 @@
-import { z } from 'https://esm.sh/v117/zod@3.20.2/es2022/zod.mjs';
+import { z } from 'https://esm.sh/zod@3.21.4';
 
-const asset_type = z.object({
+const assetType = z.object({
 	color: z.tuple([z.number(), z.number(), z.number()]),
 	bytes: z.number(),
 });
@@ -37,35 +37,35 @@ const performance = z.object({
 const step = z.object({
 	requests: z.array(request),
 	breakdown: z.object({
-		html: asset_type,
-		js: asset_type,
-		css: asset_type,
-		image: asset_type,
-		font: asset_type,
-		other: asset_type,
+		html: assetType,
+		js: assetType,
+		css: assetType,
+		image: assetType,
+		font: assetType,
+		other: assetType,
 	}),
 }).merge(performance);
 
-const single_run = z.object({
+const singleRun = z.object({
 	numSteps: z.literal(1),
 }).merge(step);
 
-const multiple_run = z.object({
+const multipleRun = z.object({
 	numSteps: z.literal(2),
 	steps: z.array(step).nonempty(),
 });
 
-const test_result = z.object({
+const testResult = z.object({
 	testUrl: z.string(),
 	from: z.string(),
 	runs: z.object({
 		1: z.object({
-			firstView: single_run.or(multiple_run),
+			firstView: singleRun.or(multipleRun),
 		}),
 	}),
 });
 
-const data = z.object({ data: test_result });
+const data = z.object({ data: testResult });
 
 /** @param json {unknown} */
-export const parsed_result = (json) => data.parse(json).data;
+export const parsedResult = (json) => data.parse(json).data;

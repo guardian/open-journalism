@@ -2,12 +2,9 @@
 	// @ts-check
 	// @ts-expect-error -- ESBuild has it
 	import { onMount } from "svelte/internal";
-	import { get_result } from "../../wpt/lib/get_result.js";
-	import { get_image_src } from "../../wpt/lib/get_image.js";
-	import {
-		get_web_vitals_score,
-		is_metric,
-	} from "../../bigquery_score/score.js";
+	import { getResult } from "../../wpt/lib/get_result.js";
+	import { getImageSrc } from "../../wpt/lib/get_image.js";
+	import { getWebVitalsScore, isMetric } from "../../bigquery_score/score.js";
 	import Sankey from "./sankey/Sankey.svelte";
 
 	/** @typedef {import("../../bigquery_score/score.js").Metric} Metric */
@@ -16,17 +13,17 @@
 	let test = undefined;
 
 	/** @type {(pair: [string, any]) => pair is [Metric, number]} */
-	const is_valid = (pair) => is_metric(pair[0]) && typeof pair[1] === "number";
+	const isValid = (pair) => isMetric(pair[0]) && typeof pair[1] === "number";
 
 	/** @param {number} score */
-	const score_to_label = (score) => {
+	const scoreToLabel = (score) => {
 		if (score >= 90) return "good";
 		if (score >= 50) return "needs-improvement";
 		return "poor";
 	};
 
 	/** @param {string} from */
-	const get_device_type = (from) => {
+	const getDeviceType = (from) => {
 		if (from.includes("Motorola G (gen 4)")) return "moto-g4";
 		if (from.includes("iPhone")) return "iphone";
 		return "unknown";
@@ -56,7 +53,7 @@
 </script>
 
 {#if test}
-	{#await get_result(test)}
+	{#await getResult(test)}
 		<div class="loading">
 			<p>Loading report…</p>
 
@@ -78,7 +75,7 @@
 			</svg>
 		</div>
 	{:then { performance, from, requests, testUrl }}
-		{@const device_type = get_device_type(from)}
+		{@const device_type = getDeviceType(from)}
 		{@const [location, , , device, speed] = from.split("-")}
 
 		<div id="report-meta">
@@ -133,13 +130,13 @@
 					</tr>
 				</thead>
 				<tbody>
-					{#each Object.entries(performance).filter(is_valid) as [key, value]}
-						{@const score = Math.round(get_web_vitals_score(key, value))}
+					{#each Object.entries(performance).filter(isValid) as [key, value]}
+						{@const score = Math.round(getWebVitalsScore(key, value))}
 						{@const formatted_value =
 							key === "cls"
 								? Math.round(value * 1000) / 1000
 								: `${Intl.NumberFormat("en-GB").format(value / 1000)}s`}
-						<tr class={score_to_label(score)}>
+						<tr class={scoreToLabel(score)}>
 							<th>{full_name(key)} ({key})</th>
 							<td class="formatted-value">{formatted_value}</td>
 							<td class="score">({score})</td>
@@ -162,7 +159,7 @@
 				{/if}
 				<img
 					class="screenshot"
-					src={get_image_src(test)}
+					src={getImageSrc(test)}
 					alt="Screenshot of page"
 					width={211}
 				/>

@@ -12,7 +12,7 @@ const metrics =
 /** @typedef {keyof typeof metrics} Metric */
 
 /** @type {(metric: string) => metric is Metric} */
-export const is_metric = (metric) => metric in metrics;
+export const isMetric = (metric) => metric in metrics;
 
 /** This will run in JS inside BigQuery, so we need to handle errors
  *
@@ -29,7 +29,7 @@ export const is_metric = (metric) => metric in metrics;
  * @param {Metric} metric
  * @param {number} value
  */
-export const get_web_vitals_score = (metric, value) =>
-	is_metric(metric) && typeof value === 'number'
+export const getWebVitalsScore = (metric, value) =>
+	isMetric(metric) && typeof value === 'number'
 		? getLogNormalScore(metrics[metric], value) * 100
 		: undefined;
