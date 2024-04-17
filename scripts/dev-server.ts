@@ -2,7 +2,7 @@
  * Runs a dev server for the site (`src/_site`).
  */
 
-import { watch } from 'https://deno.land/x/mononykus@0.7.1/src/build.ts';
+import { watch } from 'https://deno.land/x/mononykus@0.7.3/src/build.ts';
 
 await watch({
 	site_dir: 'src/_site/',
