@@ -5,6 +5,7 @@
 		"dev": "deno run --allow-net --allow-read --allow-write --allow-env --allow-run --allow-sys scripts/dev-server.ts",
 		"maintain-readme": "deno run -A scripts/maintain_readme.js"
 	},
+	"lock": false,
 	"compilerOptions": {
 		"lib": ["dom", "dom.iterable", "deno.ns"],
 		"allowJs": true,
